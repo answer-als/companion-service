@@ -1,9 +1,19 @@
-import log from '../../models/log.mjs';
-
-const error = log('api').error;
+import fs from 'fs';
+import crypto from 'crypto';
+import appRoot from 'app-root-path';
 
 export const getPicture = (request, response) => {
 
-  response.status(200).append('hash', 0xBAADF00D).end();
+  const sha1sum = crypto.createHash('sha1');
+
+  const photos = fs.readdirSync(appRoot + '/public/photos');
+  const index = Math.floor(Math.random() * (photos.length));
+
+  const photo = fs.readFileSync(appRoot + '/public/photos/' + photos[index]); // TODO: Select from the possible list of files
+
+  sha1sum.update(photo);
+  const hash = sha1sum.digest('hex');
+
+  response.status(200).append('hash', hash).end(photo);
 
 };

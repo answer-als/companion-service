@@ -1,9 +1,19 @@
-import log from '../../models/log.mjs';
-
-const error = log('api').error;
+import fs from 'fs';
+import crypto from 'crypto';
+import appRoot from 'app-root-path';
 
 export const getSentence = (request, response) => {
 
-  response.status(200).append('hash', 0xDEADBEEF).end('This is a test sentence');
+  const sha1sum = crypto.createHash('sha1');
+
+  const sentences = fs.readFileSync(appRoot + '/public/sentences', 'utf8').split('\n');
+
+  const index = Math.floor(Math.random() * (sentences.length));
+  const sentence = sentences[index];
+
+  sha1sum.update(sentence);
+  const hash = sha1sum.digest('hex');
+
+  response.status(200).append('hash', hash).end(sentence);
 
 };
