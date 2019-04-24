@@ -23,6 +23,7 @@
     "express": "^4.16.4",
     "hbs": "^4.0.3",
     "markdownlint": "^0.12.0",
+    "moment": "^2.24.0",
     "morgan": "^1.9.1",
     "nodemon": "^1.18.11",
     "supports-color": "^6.1.0",
