@@ -1,0 +1,34 @@
+{
+  "name": "companion-service",
+  "version": "1.0.0",
+  "description": "Answer ALS Companion's service",
+  "scripts": {
+    "start": "node --experimental-modules app.mjs",
+    "lint": "eslint . --ext js,mjs",
+    "monitor": "nodemon",
+    "test": "npm run lint"
+  },
+  "author": "Jay Beavers",
+  "license": "MIT",
+  "repository": "https://github.com/answer-als/companion-service",
+  "readme": "README.md",
+  "dependencies": {
+    "@sendgrid/mail": "^6.3.1",
+    "async": "^2.6.2",
+    "body-parser": "^1.18.3",
+    "cookie-parser": "^1.4.4",
+    "cors": "^2.8.5",
+    "debug": "^4.1.1",
+    "express": "^4.16.4",
+    "hbs": "^4.0.3",
+    "markdownlint": "^0.12.0",
+    "morgan": "^1.9.1",
+    "nodemon": "^1.18.11",
+    "supports-color": "^6.1.0",
+    "underscore": "^1.9.1"
+  },
+  "devDependencies": {
+    "eslint": "^5.15.1",
+    "markdownlint-cli": "^0.14.0"
+  }
+}
