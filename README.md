@@ -32,7 +32,7 @@ Responses:
   200
   400 { errorcode: ###, error: '...' }
 
-### PUT Basic User Profile Data
+### Put User Profile
 
 PUT https://answeralsdev.evergreencircuits.com/api/1/profile/:userid
 
