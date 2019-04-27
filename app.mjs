@@ -26,7 +26,7 @@ app.set('view engine', 'hbs');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded( { extended: false }));
-app.use(bodyParser.raw( { limit: '1000kb' }));
+app.use(bodyParser.raw( { limit: '10000kb' }));
 
 app.use(cors());
 
