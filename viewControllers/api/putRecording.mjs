@@ -1,11 +1,8 @@
-import fs from 'fs';
+import log from '../../models/log.mjs';
+import storage from '../../models/storage.mjs';
 import moment from 'moment';
 
-const storageDir = '/data/companionservice/';
-
-if (!fs.existsSync(storageDir)) {
-  fs.mkdirSync(storageDir);
-}
+const error = log('api').error;
 
 export const putRecording = (request, response) => {
 
@@ -13,8 +10,18 @@ export const putRecording = (request, response) => {
   const userid = request.params.userid;
   const hash = request.params.hash;
 
-  fs.writeFileSync(storageDir + userid + '-' + hash + '-' + moment().format('YYYYMMDD-HHmmss-SSS'), buffer);
+  const filename = userid + '-' + hash + '-' + moment().format('YYYYMMDD-HHmmss-SSS') + '.m4a';
 
-  response.status(200).end();
+  storage.write(filename, buffer, (err) => {
+
+    if (err) {
+      error(err);
+      response.status(500).end();
+      return;
+    }
+
+    response.status(200).end();
+
+  });
 
 };

@@ -1,18 +1,25 @@
-import fs from 'fs';
+import log from '../../models/log.mjs';
+import storage from '../../models/storage.mjs';
 
-const storageDir = '/data/companionservice/';
-
-if (!fs.existsSync(storageDir)) {
-  fs.mkdirSync(storageDir);
-}
+const error = log('api').error;
 
 export const putProfile = (request, response) => {
 
   const body = request.body;
   const userid = request.params.userid;
 
-  fs.writeFileSync(storageDir + userid + '.profile', JSON.stringify(body));
+  const filename = userid + '.profile';
 
-  response.status(200).end();
+  storage.write(filename, Buffer.from(JSON.stringify(body), 'utf8'), (err) => {
+
+    if (err) {
+      error(err);
+      response.status(500).end();
+      return;
+    }
+
+    response.status(200).end();
+
+  });
 
 };

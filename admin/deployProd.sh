@@ -4,4 +4,4 @@ docker tag answer-als/companion-service:test answer-als/companion-service:$tag
 docker stop companion-service
 docker rm companion-service
 docker system prune -f
-docker run -d --name companion-service --restart always -v /data/companionservice:/data/companionservice -e "CONTAINER_NAME=companion-service" -l traefik.frontend.rule=Host:answeralsdev.evergreencircuits.com -l traefik.enable=true answer-als/companion-service:$tag
+docker run -d --name companion-service --restart always -v /data/companionservice:/data/companionservice -e AZURE_STORAGE_ACCOUNT -e AZURE_STORAGE_ACCESS_KEY -e "CONTAINER_NAME=companion-service" -l traefik.frontend.rule=Host:answeralsdev.evergreencircuits.com -l traefik.enable=true answer-als/companion-service:$tag
