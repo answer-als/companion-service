@@ -9,7 +9,7 @@ export const getPicture = (request, response) => {
   const photos = fs.readdirSync(appRoot + '/public/photos');
   const index = Math.floor(Math.random() * (photos.length));
 
-  const photo = fs.readFileSync(appRoot + '/public/photos/' + photos[index]); // TODO: Select from the possible list of files
+  const photo = fs.readFileSync(appRoot + '/public/photos/' + photos[index]);
 
   sha1sum.update(photo);
   const hash = sha1sum.digest('hex');

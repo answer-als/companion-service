@@ -4,6 +4,7 @@
   "description": "Answer ALS Companion's service",
   "scripts": {
     "start": "node --experimental-modules app.mjs",
+    "debug": "nodemon --experimental-modules --inspect app.mjs",
     "lint": "eslint . --ext js,mjs",
     "monitor": "nodemon",
     "test": "npm run lint"
@@ -26,7 +27,7 @@
     "markdownlint": "^0.12.0",
     "moment": "^2.24.0",
     "morgan": "^1.9.1",
-    "nodemon": "^1.18.11",
+    "nodemon": "^1.19.1",
     "supports-color": "^6.1.0",
     "underscore": "^1.9.1"
   },
