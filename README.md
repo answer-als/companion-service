@@ -58,11 +58,12 @@ Response Header contains the content-type of the recording, or application/x-cou
 
 HEAD https://answeralsdev.evergreencircuits.com/api/1/recording/:hash
 
-Response Header contains the content-type of the recording, or application/x-counting-task for a counting task as well as the friendly name of the content
+Response Header contains the content-type of the recording, or application/x-counting-task for a counting task as well
+as the friendly name of the content.
 
-    curl -I http://localhost:3000/api/v1/recording/31d9324b07f3a2c61007b30599c9557f17630f8b
+    curl -I http://answeralsdev.evergreencircuits.com/api/v1/recording/31d9324b07f3a2c61007b30599c9557f17630f8b
 
-    HTTP/1.1 200 OK 
+    HTTP/1.1 200 OK
     X-Powered-By: Express
     Access-Control-Allow-Origin: *
     Content-Type: image/jpeg
@@ -70,4 +71,4 @@ Response Header contains the content-type of the recording, or application/x-cou
     Content-Length: 150623
     ETag: W/"24c5f-MdkySwfzosYQB7MFmclVfxdjD4s"
     Date: Tue, 11 Jun 2019 13:58:16 GMT
-    Connection: keep-alive 
+    Connection: keep-alive
