@@ -118,6 +118,8 @@ const hashLookup = (queryHash) => {
 
   }
 
+  return 'notfound-' + queryHash;
+
 };
 
 export default {
