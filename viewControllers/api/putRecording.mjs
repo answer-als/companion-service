@@ -10,7 +10,9 @@ export const putRecording = (request, response) => {
   const userid = request.params.userid;
   const hash = request.params.hash;
 
-  const filename = userid + '-' + hash + '-' + moment().format('YYYYMMDD-HHmmss-SSS') + '.m4a';
+  const friendlyName = storage.hashLookup(hash);
+
+  const filename = userid + '_' + friendlyName + '_' + moment().format('YYYYMMDD-HHmmss-SSS') + '.m4a';
 
   storage.write(filename, buffer, (err) => {
 

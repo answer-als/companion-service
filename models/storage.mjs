@@ -3,6 +3,8 @@ import log from './log.mjs';
 import fs from 'fs';
 import storage from 'azure-storage';
 import { PassThrough } from 'stream';
+import appRoot from 'app-root-path';
+import crypto from 'crypto';
 
 assert(process.env.AZURE_STORAGE_ACCOUNT, 'AZURE_STORAGE_ACCOUNT environment variable must be set');
 assert(process.env.AZURE_STORAGE_ACCESS_KEY, 'AZURE_STORAGE_ACCESS_KEY environment variable must be set');
@@ -67,6 +69,58 @@ const write = (filename, buffer, callback) => {
 
 };
 
+const hashLookup = (queryHash) => {
+
+  // Is this a counting task?  Find simplest first
+
+  if (queryHash == 'CountingTask') {
+
+    return 'counting-task';
+  }
+
+  // Check for a sentence match
+
+  const sentences = fs.readFileSync(appRoot + '/public/sentences', 'utf8').split('\n');
+  var index = 0;
+  for (let sentence of sentences) {
+
+    const sha1sum = crypto.createHash('sha1');
+    sha1sum.update(sentence);
+    const hash = sha1sum.digest('hex');
+
+    if (hash == queryHash) {
+
+      return 'sentence-' + index;
+
+    }
+
+    index++;
+
+  }
+
+  // Check for a photo match
+
+  const photoNames = fs.readdirSync(appRoot + '/public/photos');
+
+  for (let photoName of photoNames) {
+
+    const photo = fs.readFileSync(appRoot + '/public/photos/' + photoName);
+
+    const sha1sum = crypto.createHash('sha1');
+    sha1sum.update(photo);
+    const hash = sha1sum.digest('hex');
+
+    if (hash == queryHash) {
+
+      return photoName;
+
+    }
+
+  }
+
+};
+
 export default {
-  write
+  write,
+  hashLookup
 };

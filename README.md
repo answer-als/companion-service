@@ -13,7 +13,7 @@ Response:
 
 ### Get Picture
 
-GET https://answeralsdev.evergreencircuits.com/api/1/picture/:userid
+GET https://answeralsdev.evergreencircuits.com/api/v1/picture/:userid
 
 Response:
   headers.hash
@@ -25,7 +25,7 @@ Response:
 This api writes out the uploaded bytes to /data/companionservice/:userid-:hash-timestamp
 In the future it will save the files to an Azure Blob Storage account
 
-PUT https://answeralsdev.evergreencircuits.com/api/1/recording/:userid/:hash
+PUT https://answeralsdev.evergreencircuits.com/api/v1/recording/:userid/:hash
 
 Request Stream contains the m4a file data of the recording.
 Note: limited to 1000 kb streams
@@ -41,7 +41,7 @@ Responses:
 This api writes out the uploaded JSON to /data/companionservice/:userid.profile
 In the future it will save the files to an Azure Blob Storage account
 
-PUT https://answeralsdev.evergreencircuits.com/api/1/profile/:userid
+PUT https://answeralsdev.evergreencircuits.com/api/v1/profile/:userid
 
 Request: { ... }
 
@@ -49,14 +49,14 @@ Request: { ... }
 
 ### Get Content &amp; Metadata for an upload
 
-GET https://answeralsdev.evergreencircuits.com/api/1/recording/:hash
+GET https://answeralsdev.evergreencircuits.com/api/v1/recording/:hash
 
 Response Stream contains the data used to prompt the Recording (e.g. sentence text or picture image)
 Response Header contains the content-type of the recording, or application/x-counting for a counting task
 
 ### Get Metadata for an upload
 
-HEAD https://answeralsdev.evergreencircuits.com/api/1/recording/:hash
+HEAD https://answeralsdev.evergreencircuits.com/api/v1/recording/:hash
 
 Response Header contains the content-type of the recording, or application/x-counting-task for a counting task as well
 as the friendly name of the content.
