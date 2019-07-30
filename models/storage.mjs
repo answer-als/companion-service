@@ -6,8 +6,11 @@ import { PassThrough } from 'stream';
 import appRoot from 'app-root-path';
 import crypto from 'crypto';
 
-assert(process.env.AZURE_STORAGE_ACCOUNT, 'AZURE_STORAGE_ACCOUNT environment variable must be set');
-assert(process.env.AZURE_STORAGE_ACCESS_KEY, 'AZURE_STORAGE_ACCESS_KEY environment variable must be set');
+const account = process.env.AZURE_STORAGE_ACCOUNT_PROD || process.env.AZURE_STORAGE_ACCOUNT;
+const key = process.env.AZURE_STORAGE_ACCESS_KEY_PROD || process.env.AZURE_STORAGE_ACCESS_KEY;
+
+assert(account, 'AZURE_STORAGE_ACCOUNT environment variable must be set');
+assert(key, 'AZURE_STORAGE_ACCESS_KEY environment variable must be set');
 
 const error = log('api').error;
 
@@ -19,7 +22,7 @@ if (!fs.existsSync(storageDir)) {
   fs.mkdirSync(storageDir);
 }
 
-const blobs = storage.createBlobService(process.env.AZURE_STORAGE_ACCOUNT, process.env.AZURE_STORAGE_ACCESS_KEY);
+const blobs = storage.createBlobService(account, key);
 //blobs.logger.level = storage.Logger.LogLevels.DEBUG;
 
 blobs.createContainerIfNotExists(
