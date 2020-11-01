@@ -76,10 +76,15 @@ const hashLookup = (queryHash) => {
 
   // Is this a counting task?  Find simplest first
 
-  if (queryHash == 'CountingTask') {
+    if (queryHash == 'CountingTask') {
 
-    return 'counting-task';
-  }
+      return 'counting-task';
+    }
+
+    if (queryHash == 'AhTask') {
+
+      return 'ah-task';
+    }
 
   // Check for a sentence match
 

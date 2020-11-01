@@ -1,0 +1,42 @@
+logLevel = "DEBUG"
+defaultEntryPoints = ["http", "https"]
+[traefikLog]
+  format = "json"
+  filePath = "/data/traefik/traefik.log"
+[accessLog]
+  format = "json"
+  filePath = "/data/traefik/access.log"
+[web]
+address = ":8080"
+  [web.auth.basic]
+  users = ["admin:$1$cf3qlmZf$PoOt9E8dzErkjfRAbci021"]
+[entryPoints]
+  [entryPoints.http]
+    address = ":80"
+      [entryPoints.http.redirect]
+        entryPoint = "https"
+  [entryPoints.https]
+    address = ":443"
+      [entryPoints.https.tls]
+[api]
+  entryPoint = "traefik"
+  dashboard = true
+  debug = true
+[docker]
+domain = "service.answerals.org"
+exposedbydefault = false
+watch = true
+# Enable cert fetch
+[acme]
+email = "downs.andrew@gmail.com"
+storageFile = "acme.json"
+storage = "/etc/traefik/acme.json"
+entryPoint = "https"
+onHostRule = false
+onDemand = true
+acmeLogging = true
+[acme.httpChallenge]
+entryPoint = "http"
+[[acme.domains]]
+main = "service.answerals.org"
+sans = ["service-dev.answerals.org"]

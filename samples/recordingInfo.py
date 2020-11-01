@@ -16,5 +16,5 @@ for filename in fileNames:
     hashCodeIndex = len(splitName) - 4
     hashCode = splitName[hashCodeIndex]
 
-    response = requests.get(url = "https://answeralsdev.evergreencircuits.com/api/v1/recording/" + hashCode)
+    response = requests.get(url = "https://service-dev.answerals.org/api/v1/recording/" + hashCode)
     print(response.headers['Friendly-Name'] + ' ' + response.headers['Content-Type'])
