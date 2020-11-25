@@ -9,7 +9,8 @@ defaultEntryPoints = ["http", "https"]
 [web]
 address = ":8080"
   [web.auth.basic]
-  users = ["admin:$1$cf3qlmZf$PoOt9E8dzErkjfRAbci021"]
+  #users = ["admin:$1$cf3qlmZf$PoOt9E8dzErkjfRAbci021"]
+  users = ["admin:$1$/jDZJZWJ$dK84PDrxvU8DHX72oN8Iu."]
 [entryPoints]
   [entryPoints.http]
     address = ":80"
@@ -39,4 +40,5 @@ acmeLogging = true
 entryPoint = "http"
 [[acme.domains]]
 main = "service.answerals.org"
-sans = ["service-dev.answerals.org"]
+sans = ["service-prod.answerals.org"]
+#sans = ["service-dev.answerals.org"]

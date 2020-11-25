@@ -1,5 +1,6 @@
 #eval $(docker-machine env dm-azure-test)
-export DOCKER_HOST=ssh://azure-test
+#export DOCKER_HOST=ssh://azure-test
+export DOCKER_HOST=ssh://vm-prod
 docker stop traefik
 docker rm traefik
 docker system prune -f
