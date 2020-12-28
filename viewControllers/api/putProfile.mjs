@@ -67,8 +67,11 @@ function createUserSequence(userid)
     const sentenceIndexFile = userDir + '/sentence_index.txt';
     const imageIndexFile = userDir + '/image_index.txt';
 
-    const sentenceSequenceFile = storageDir + userid + '_sentence_sequence.txt';
-    const imageSequenceFile = storageDir + userid + '_image_sequence.txt';
+    const sentenceSequenceFile = userid + '_sentence_sequence.txt';
+    const imageSequenceFile = userid + '_image_sequence.txt';
+
+//    const sentenceSequenceFile = storageDir + userid + '_sentence_sequence.txt';
+//    const imageSequenceFile = storageDir + userid + '_image_sequence.txt';
 
     const maxSentences = 21;
     const maxImages = 19;
@@ -103,7 +106,19 @@ function createUserSequence(userid)
                 sequenceString += " ";
             }
             
-            fs.writeFileSync(sentenceSequenceFile, sequenceString);
+//            fs.writeFileSync(sentenceSequenceFile, sequenceString);
+            storage.write(sentenceSequenceFile, Buffer.from(sequenceString, 'utf8'), (err) => {
+
+              if (err) {
+                error(err);
+            //    response.status(500).end();
+              //  return;
+              }
+
+              //response.status(200).end();
+
+            });
+
         }
 
         if (!fs.existsSync(imageSequenceFile)) {
@@ -117,7 +132,20 @@ function createUserSequence(userid)
                 sequenceString += " ";
             }
             
-            fs.writeFileSync(imageSequenceFile, sequenceString);
+            //fs.writeFileSync(imageSequenceFile, sequenceString);
+            storage.write(imageSequenceFile, Buffer.from(sequenceString, 'utf8'), (err) => {
+
+              if (err) {
+                error(err);
+            //    response.status(500).end();
+              //  return;
+              }
+
+              //response.status(200).end();
+
+            });
+
+
         }
 
         retval = true;
