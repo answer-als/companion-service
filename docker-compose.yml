@@ -1,0 +1,14 @@
+version: "2"
+services:
+  companion-service:
+    build: ./
+    ports:
+      - "3000:3000"
+    tty: true
+    volumes:
+      - .:/usr/src/app
+    command: >
+      sh -c "npm install &&
+             nodemon"
+    env_file:
+        - .env
