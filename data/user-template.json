@@ -1,0 +1,17 @@
+{
+	"id" : "",
+	"profile" : "",
+	"sentences" : {
+		"sequence" : [],
+		"current_index" : 0,
+		"version" : "1.0.0"
+	},
+	"pictures" : {
+		"sequence" : [],
+		"current_index" : 0,
+		"version" : "1.0.0"
+	},
+	"version" : "1.0.0"
+	"created_at" : null,
+	"updated_at" : null
+}
