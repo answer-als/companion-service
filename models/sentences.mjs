@@ -1,9 +1,9 @@
 "usr strict"
 
-import log from '../models/log.mjs';
 import fs from 'fs';
 import crypto from 'crypto';
 import appRoot from 'app-root-path';
+import log from '../models/log.mjs';
 
 export default class Sentences {
 
