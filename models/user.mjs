@@ -1,9 +1,9 @@
 "use strict"
 
-import log from '../models/log.mjs';
 import fs from 'fs';
 import moment from 'moment';
 import appRoot from 'app-root-path';
+import log from '../models/log.mjs';
 
 export default class User {
 
@@ -15,6 +15,7 @@ export default class User {
       this.loadUserData();
     }
 
+    // USER DATA
     loadUserData() {
 
       if (!fs.existsSync(this.userFilePath)) {
@@ -43,10 +44,21 @@ export default class User {
       this.writeUserData();
     }
 
+    writeUserData() {
+      const data = JSON.stringify(this.data);
+      fs.writeFileSync(this.userFilePath, data);
+    }
+
+    // PROFILE
+    getProfile() {
+      return this.data.profile;
+    }
+
     updateProfile(profile) {
       this.data.profile = profile;
     }
 
+    // PICTURES
     getCurrentPictureNumber() {
       return this.data.pictures.sequence[this.data.pictures.current_index];
     }
@@ -68,11 +80,8 @@ export default class User {
       this.writeUserData();
 
     }
-    writeUserData() {
-      const data = JSON.stringify(this.data);
-      fs.writeFileSync(this.userFilePath, data);
-    }
 
+    // SENTENCES
     getCurrentSentenceNumber() {
       return this.data.sentences.sequence[this.data.sentences.current_index];
     }
@@ -93,10 +102,6 @@ export default class User {
 
       this.writeUserData();
 
-    }
-    writeUserData() {
-      const data = JSON.stringify(this.data);
-      fs.writeFileSync(this.userFilePath, data);
     }
 
 }
