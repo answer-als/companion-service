@@ -12,6 +12,8 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 
+const environment = process.env.NODE_ENV;
+
 let debug = log('app').debug;
 let unhandledError = log('unhandled').error;
 
