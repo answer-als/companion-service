@@ -1,0 +1,196 @@
+ALS FRS Question
+These questions from the ALSFRS are ordered as they are in the Companion app.
+--------------------------------------------------------------------------------
+QUESTION LEGEND
+Companion Question: {X}
+ALSFRS Question: {N}
+Question: {Text of the ALSFRS.}
+Help Text: {Help text made available in the app.}
+
+Name            Value           Text
+{AppIdentifier} {ALSFRS Value}  {ALSFRS response text}
+...
+
+--------------------------------------------------------------------------------
+Companion Question: 1
+ALSFRS Question: -
+Question: Who is answering the questions?
+Help Text: Are you the person with ALS or someone else answering on behalf of that person?
+
+Name            Value     Text
+PersonOption    4         I am the person with ALS
+FamilyOption    3         Family member
+CaregiverOption 2         Caregiver
+NurseOption     1         ALS clinic nurse
+PhysicanOption  0         ALS clinic physician
+NoDiagnosis     5         No ALS diagnosis
+--------------------------------------------------------------------------------
+Companion Question: 3
+ALSFRS Question: 1
+Topic: Speech
+Help Text: This is about how your voice sounds and how well you can form words verbally.
+
+Name              Value   Text
+NormalOption      4       Normal speech processes
+DetectableOption  3       Detectable speech disturbance
+IntelligibleOption2       Intelligible with repeating
+NonVocalOption    1       Speech combined with non-vocal communication
+LossOption        0       Loss of useful speech
+
+--------------------------------------------------------------------------------
+Companion Question: 4
+ALSFRS Question: 2
+Topic: Salivation
+Help Text: This is about the amount of watery saliva you have in your mouth. Rate your current status regardless of whether you are taking medication for salivation.
+
+Name                Value   Text
+NormalOption        4       Normal
+SlightOption        3       Slight but definite excess of saliva in mouth; may have nighttime drooling
+ModerateOption      2       Moderately excessive saliva; may have minimal drooling
+MarkedExcessOption  1       Marked excess of saliva with some drooling
+MarkedDroolingOption0       Marked drooling; requires constant tissue or handkerchief
+--------------------------------------------------------------------------------
+Companion Question: 5
+ALSFRS Question: 3
+Topic: Swallowing
+Help Text: This is about how well you eat and drink via your mouth. This includes food, liquids, and oral medication.
+
+Name                Value   Text
+NormalOption        4       Normal eating habits
+EarlyOption         3       Early eating problems; occasional choking
+DietaryOption       2       Dietary consistency changes
+SupplementalOption  1       Needs supplemental tube feeding
+NpoOption           0       NPO (exclusively parenteral or enteral feeding)
+--------------------------------------------------------------------------------
+Companion Question: 6
+ALSFRS Question: 4
+Topic: Handwriting
+Help Text: This is about how well you write with a pen using your dominant hand, without any assistive devices (such as foam tubing or mechanical aids) due to finger weakness.
+
+Name                Value   Text
+NormalOption        4       Normal
+SlowOption          3       Slow or sloppy; all words are legible
+NotAllLegibleOption 2       Not all words are legible
+AbleToGripOption    1       Able to grip pen but unable to write
+UnableToGripOption  0       Unable to grip pen
+
+--------------------------------------------------------------------------------
+Companion Question: 7a
+ALSFRS Question: 5a
+Topic: Cutting food and handling utensils (w/o Gastrostomy)
+Help Text: This is about how well you cut food and handle utensils, such as a knife, fork, spoon, and tin can openers.
+
+Name                Value   Text
+NAOption            5       N/A
+NormalOption        4       Normal
+SlowOption          3       Somewhat slow and clumsy, but no help needed
+CutMostOption       2       Can cut most foods, although clumsy and slow; some help needed
+CutBySomeoneOption  1       Food must be cut by someone, but can still feed slowly
+NeedsToBeFedOption  0       Needs to be fed
+
+--------------------------------------------------------------------------------
+Companion Question: 7b
+ALSFRS Question: 5b
+Topic: Cutting food and handling utensils (w/ Gastrostomy)
+Help Text: This is about how well you cut food and handle utensils, such as a knife, fork, spoon, and tin can openers.
+
+Name                Value   Text
+NAOption            5       N/A
+NormalOption        4       Normal
+SlowOption          3       Clumsy but able to perform all manipulations independently
+CutMostOption       2       Some help needed with closures and fasteners
+CutBySomeoneOption  1       Provides minimal assistance to caregivers
+NeedsToBeFedOption  0       Unable to perform any aspect of task
+
+--------------------------------------------------------------------------------
+Companion Question: 8
+ALSFRS Question: 6
+Topic: Dressing and hygiene
+Help Text: This is about how well you get dressed and maintain personal hygiene.
+
+Name                          Value   Text
+NormalOption                  4       Normal function
+IndependentOption             3       Independent and complete self-care with effort or decreased efficiency
+IntermittentAssistanceOption  2       Intermittent assistance or substitute methods
+NeedsAttendantOption          1       Needs attendant for self-care
+TotalDependenceOption         0       Total dependence
+
+--------------------------------------------------------------------------------
+Companion Question: 9
+ALSFRS Question: 7
+Topic: Turning in bed
+Help Text: This is about how well you roll over in bed and pull up the bed sheets. Do not relate to your ability to get in or out of bed.
+
+Name                        Value   Text
+NormalOption                4       Normal
+SlowOption                  3       Somewhat slow and clumsy, but no help needed
+TurnAloneOption             2       Can turn alone or adjust sheets, but with great difficulty
+InitiateOption              1       Can initiate, but not turn or adjust sheets alone
+HelplessOption              0       Helpless
+
+--------------------------------------------------------------------------------
+Companion Question: 10
+ALSFRS Question: 8
+Topic: Walking
+Help Text: This is about how well you walk.
+
+Name                      Value   Text
+NormalOption              4       Normal
+EarlyAmbulationOption     3       Early ambulation difficulties
+AssistanceOption          2       Walks with assistance
+NonAmbulatoryOption       1       Non-ambulatory functional movement only
+NoMovementOption          0       No purposeful leg movement
+
+--------------------------------------------------------------------------------
+Companion Question: 11
+ALSFRS Question: 9
+Topic: Climbing stairs
+Help Text: This is about how well you can go up stairs.
+
+Name                    Value   Text
+NormalOption            4       Normal
+SlowOption              3       Slow
+MildOption              2       Mild unsteadiness or fatigue
+AssistanceOption        1       Needs assistance
+CannotOption            0       Cannot do
+
+--------------------------------------------------------------------------------
+Companion Question: 12
+ALSFRS Question: R-1
+Topic: Dyspnea
+Help Text: This is about if you experience shortness of breath during normal activities of daily living, such as walking, eating, bathing, and dressing (not tired, rather short of breath).
+
+Name                        Value   Text
+NoneOption                  4       None (No difficulty)
+WalkingOption               3       Occurs when walking
+AdlOption                   2       Occurs with one or more of the following: eating, bathing, dressing (ADL)
+AtRestOption                1       Occurs at rest, difficulty breathing when either sitting or lying
+SignificantDifficultyOption 0       Significant difficulty, considering using mechanical respiratory support
+
+--------------------------------------------------------------------------------
+Companion Question: 13
+ALSFRS Question: R-2
+Topic: Orthopnea
+Help Text: This is about shortness of breath that occurs only when lying down.
+
+Name                      Value   Text
+NoneOption                4       None (No difficulty)
+SomeDifficultyOption      3       Some difficulty sleeping at night due to shortness of breath. Does not routinely use more than two pillows.
+ExtraPillowsOption        2       Needs extra pillows in order to sleep (more than two)
+SittingUpOption           1       Can only sleep sitting up
+UnableOption              0       Unable to sleep
+
+--------------------------------------------------------------------------------
+Companion Question: 14
+ALSFRS Question: R-3
+Topic: Respiratory Insufficiency
+Help Text: This is about how dependent you are on mechanical assistance for breathing, mostly from BiPAP (bi-level positive airway pressure).
+
+Name                      Value   Text
+NoneOption                4       None
+IntermittentOption        3       Intermittent use of BiPAP
+ContinuousOption          2       Continuous use of BiPAP
+NightAndDayOption         1       Continuous use of BiPAP during the night and day
+MechanicalOption          0       Invasive mechanical ventilation by intubation or tracheostomy
+
+--------------------------------------------------------------------------------
