@@ -1,15 +1,19 @@
-import moment from 'moment';
 import log from '../../models/log.mjs';
-import storage from '../../models/storage.mjs';
+import AppData from '../../models/appData.mjs';
+import Storage from '../../models/storage.mjs';
+import User from '../../models/user.mjs';
 
 const error = log('api').error;
 
 function getRecording (request, response) {
 
+  const appData = new AppData();
+
   const queryHash = request.params.hash;
 
-  const friendlyName = storage.hashLookup(queryHash);
+  const friendlyName = appData.getStoreName(queryHash);
 
+  // TODO WHY IS THIS IN THE HEADER INSTEAD OF A PAYLOAD?
   response.append('Content-Type', 'application/x-counting-task');
   response.append('Friendly-Name', friendlyName);
   response.status(200).end();
@@ -22,11 +26,13 @@ function putRecording (request, response) {
   const userid = request.params.userid;
   const hash = request.params.hash;
 
-  const friendlyName = storage.hashLookup(hash);
+  const appData = new AppData();
+  const storage = new Storage(appData);
 
-  const filename = userid + '_' + friendlyName + '_' + moment().format('YYYYMMDD-HHmmss-SSS') + '.m4a';
+  var user = new User(userid, appData);
 
-  storage.write(filename, buffer, (err) => {
+  // RESPONSE CALL BACK
+  let callback = function(err) {
 
     if (err) {
       error(err);
@@ -36,7 +42,10 @@ function putRecording (request, response) {
 
     response.status(200).end();
 
-  });
+  }
+
+  // WRITE TO STORAGE
+  storage.write(user, hash, buffer, callback);
 
 };
 

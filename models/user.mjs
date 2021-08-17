@@ -18,6 +18,8 @@ export default class User {
     // USER DATA
     loadUserData() {
 
+      // TODO THIS SHOULD LOAD AND WRITE TO AZURE BLOB
+
       if (!fs.existsSync(this.userFilePath)) {
         this.createUserData()
       } else {
@@ -28,6 +30,8 @@ export default class User {
     }
 
     createUserData() {
+
+      // TODO THIS SHOULD LOAD AND WRITE TO AZURE BLOB
 
       const rawTemplateData = fs.readFileSync(this.userTemplatePath);
 

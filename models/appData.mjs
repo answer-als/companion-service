@@ -17,14 +17,67 @@ export default class AppData {
       this.data = JSON.parse(rawData);
     }
 
+    // ASSETS
+    getAssetDetails(testHash) {
+
+      var details = {};
+
+      // TASKS
+      if (testHash == 'CountingTask') {
+        details.type = 'counting-task';
+      }
+
+      if (testHash == 'AhTask') {
+        details.type = 'ah-task';
+      }
+
+      // SENTENCES
+      for (let i = 0; i < this.data.sentences.sentence_numbers.length; i++) {
+
+        let sentenceData = this.data.sentences[i];
+
+        if (testHash == sentenceData.hash) {
+          details.type = "sentence";
+          details.data = sentenceData;
+        }
+
+      }
+
+      // PICTURES
+      for (let j = 0; j < this.data.pictures.picture_numbers.length; j++) {
+
+        let pictureData = this.data.pictures[j]
+
+        if (testHash == pictureData.hash) {
+          details.type = "picture";
+          details.data = pictureData;
+        }
+
+      }
+
+      return details;
+
+    }
+
+    getStoreName(testHash) {
+
+      var assetDetails = this.getAssetDetails(testHash);
+
+      return assetDetails.data.store_name;
+
+    }
+
+    // SENTENCES
     getSentence(number) {
       return this.data.sentences[number];
     }
 
+    // PICTURES
     getPicture(number) {
       return this.data.pictures[number];
     }
 
+    // SEQUENCES
     getRandomPictureSequence() {
       return this.shuffle(this.data.pictures.picture_numbers);
     }
