@@ -7,15 +7,6 @@ import { PassThrough } from 'stream';
 import appRoot from 'app-root-path';
 import crypto from 'crypto';
 
-const account = process.env.AZURE_STORAGE_ACCOUNT_PROD || process.env.AZURE_STORAGE_ACCOUNT;
-const key = process.env.AZURE_STORAGE_ACCESS_KEY_PROD || process.env.AZURE_STORAGE_ACCESS_KEY;
-
-const storageDir = '/data/companionservice/';
-const storageContainer = 'companionservice';
-
-assert(account, 'AZURE_STORAGE_ACCOUNT environment variable must be set');
-assert(key, 'AZURE_STORAGE_ACCESS_KEY environment variable must be set');
-
 const error = log('api').error;
 
 export default class Storage {
@@ -86,12 +77,12 @@ export default class Storage {
     fs.writeFileSync(storageDir + filename, buffer);
 
     // - CREATE BLOB SERVICE
-    const blobs = storage.createBlobService(account, key);
+    const blobs = storage.createBlobService(AZURE_STORAGE_ACCOUNT, AZURE_STORAGE_ACCESS_KEY);
     //blobs.logger.level = storage.Logger.LogLevels.DEBUG;
 
     // - CREATE CONTAINER IF NECESSARY
     blobs.createContainerIfNotExists(
-      storageContainer,
+      STORAGE_AZURE_BLOB_CONTAINER,
       (err, result) => {
 
         if (err) {
@@ -99,7 +90,7 @@ export default class Storage {
         }
 
         if (!result) {
-          error('Unable to create container ' + storageContainer);
+          error('Unable to create container ' + STORAGE_AZURE_BLOB_CONTAINER);
         }
 
       }
@@ -107,7 +98,7 @@ export default class Storage {
 
     // - WRITE FILE TO BLOB
     blobs.createBlockBlobFromStream(
-      storageContainer,
+      STORAGE_AZURE_BLOB_CONTAINER,
       filename,
       stream,
       buffer.length,
