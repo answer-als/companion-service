@@ -70,11 +70,13 @@ export default class Storage {
 
     stream.end(buffer);
 
-    if (!fs.existsSync(storageDir)) {
-      fs.mkdirSync(storageDir);
+    // !!!! WHAT DOES THIS DO? >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    if (!fs.existsSync(STORAGE_DIR)) {
+      fs.mkdirSync(STORAGE_DIR);
     }
 
-    fs.writeFileSync(storageDir + filename, buffer);
+    fs.writeFileSync(STORAGE_DIR + filename, buffer);
+    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
     // - CREATE BLOB SERVICE
     const blobs = storage.createBlobService(AZURE_STORAGE_ACCOUNT, AZURE_STORAGE_ACCESS_KEY);
