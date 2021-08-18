@@ -7,8 +7,14 @@ services:
     tty: true
     volumes:
       - .:/usr/src/app
+      - /data/companionservice:/data/companionservice
     command: >
       sh -c "npm install &&
              nodemon"
     env_file:
         - .env
+    labels:
+      - traefik.port=3000
+      - traefik.foo.frontend.rule=Host:service-dev.answerals.org
+      - traefik.bar.frontend.rule=Host:service.answerals.org
+      - traefik.enable=true 
