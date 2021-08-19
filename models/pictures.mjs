@@ -1,8 +1,6 @@
-"usr strict"
+'use strict';
 
-import log from '../models/log.mjs';
 import fs from 'fs';
-import crypto from 'crypto';
 import appRoot from 'app-root-path';
 
 export default class Pictures {

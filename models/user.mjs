@@ -1,14 +1,13 @@
-"use strict"
+'use strict';
 
 import fs from 'fs';
 import moment from 'moment';
 import appRoot from 'app-root-path';
-import log from '../models/log.mjs';
 
 export default class User {
 
     constructor(id, appData = null) {
-      this.id = id
+      this.id = id;
       this.userFilePath = appRoot + '/data/users/' + this.id + '.json';
       this.userTemplatePath = appRoot + '/data/user-template.json';
       this.appData = appData;
@@ -21,7 +20,7 @@ export default class User {
       // TODO THIS SHOULD LOAD AND WRITE TO AZURE BLOB
 
       if (!fs.existsSync(this.userFilePath)) {
-        this.createUserData()
+        this.createUserData();
       } else {
         const rawData = fs.readFileSync(this.userFilePath);
         this.data = JSON.parse(rawData);
@@ -41,9 +40,9 @@ export default class User {
       this.created_at = moment();
 
       // INITIALIZE PICTURES
-      this.data.pictures.sequence = this.appData.getRandomPictureSequence()
+      this.data.pictures.sequence = this.appData.getRandomPictureSequence();
       // INITIALIZE SENTENCES
-      this.data.sentences.sequence = this.appData.getRandomSentenceSequence()
+      this.data.sentences.sequence = this.appData.getRandomSentenceSequence();
 
       this.writeUserData();
     }

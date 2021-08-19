@@ -18,7 +18,7 @@ function getRecording (request, response) {
   response.append('Friendly-Name', friendlyName);
   response.status(200).end();
 
-};
+}
 
 function putRecording (request, response) {
 
@@ -42,11 +42,11 @@ function putRecording (request, response) {
 
     response.status(200).end();
 
-  }
+  };
 
   // WRITE TO STORAGE
   storage.write(user, hash, buffer, callback);
 
-};
+}
 
-export { getRecording, putRecording }
+export { getRecording, putRecording };

@@ -1,11 +1,5 @@
-import fs from 'fs';
-import moment from 'moment';
-import log from '../../models/log.mjs';
-import storage from '../../models/storage.mjs';
 import User from '../../models/user.mjs';
 import AppData from '../../models/appData.mjs';
-
-const error = log('api').error;
 
 function getProfile (request, response) {
 
@@ -19,7 +13,7 @@ function getProfile (request, response) {
   //
   // response.status(200).end(user.getProfile());
 
-};
+}
 
 function putProfile (request, response) {
 
@@ -36,6 +30,6 @@ function putProfile (request, response) {
 
   response.status(200).end('ok');
 
-};
+}
 
 export { getProfile, putProfile };

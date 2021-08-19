@@ -1,8 +1,6 @@
-"use strict"
+'use strict';
 
-import log from '../models/log.mjs';
 import fs from 'fs';
-import moment from 'moment';
 import appRoot from 'app-root-path';
 
 export default class AppData {
@@ -37,7 +35,7 @@ export default class AppData {
         let sentenceData = this.data.sentences[i];
 
         if (testHash == sentenceData.hash) {
-          details.type = "sentence";
+          details.type = 'sentence';
           details.data = sentenceData;
         }
 
@@ -46,10 +44,10 @@ export default class AppData {
       // PICTURES
       for (let j = 0; j < this.data.pictures.picture_numbers.length; j++) {
 
-        let pictureData = this.data.pictures[j]
+        let pictureData = this.data.pictures[j];
 
         if (testHash == pictureData.hash) {
-          details.type = "picture";
+          details.type = 'picture';
           details.data = pictureData;
         }
 

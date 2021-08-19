@@ -1,11 +1,8 @@
 import fs from 'fs';
 import crypto from 'crypto';
 import appRoot from 'app-root-path';
-import log from '../../models/log.mjs';
 import User from '../../models/user.mjs';
 import AppData from '../../models/appData.mjs';
-
-const debug = log('api').debug;
 
 function getPicture (request, response) {
 
@@ -31,6 +28,6 @@ function getPicture (request, response) {
   // RETURN SENTENCE IN RESPONSE
   response.status(200).append('hash', hash).end(photo);
 
-};
+}
 
 export { getPicture };

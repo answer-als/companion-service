@@ -1,3 +1,5 @@
+'use strict';
+
 import assert from 'assert';
 
 import log from './models/log.mjs';
@@ -13,13 +15,13 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 
 // ENVIRONTMENT VARIABLES
-const environment = process.env.NODE_ENV;
+// const environment = process.env.NODE_ENV;
 
 const AZURE_STORAGE_ACCOUNT = process.env.AZURE_STORAGE_ACCOUNT;
 const AZURE_STORAGE_ACCESS_KEY = process.env.AZURE_STORAGE_ACCESS_KEY;
 
-const STORAGE_DIR = process.env.STORAGE_DIR || '/data/companionservice/';
-const STORAGE_AZURE_BLOB_CONTAINER = process.env.STORAGE_AZURE_BLOB_CONTAINER || 'companionservice';
+// const STORAGE_DIR = process.env.STORAGE_DIR || '/data/companionservice/';
+// const STORAGE_AZURE_BLOB_CONTAINER = process.env.STORAGE_AZURE_BLOB_CONTAINER || 'companionservice';
 
 assert(AZURE_STORAGE_ACCOUNT, 'AZURE_STORAGE_ACCOUNT environment variable must be set');
 assert(AZURE_STORAGE_ACCESS_KEY, 'AZURE_STORAGE_ACCESS_KEY environment variable must be set');

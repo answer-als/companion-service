@@ -1,13 +1,16 @@
-import assert from 'assert';
 import log from './log.mjs';
 import fs from 'fs';
 import moment from 'moment';
 import storage from 'azure-storage';
 import { PassThrough } from 'stream';
-import appRoot from 'app-root-path';
-import crypto from 'crypto';
 
 const error = log('api').error;
+
+// JUST TO PLEASE THE LINTER FOR NOW
+const AZURE_STORAGE_ACCOUNT = process.env.AZURE_STORAGE_ACCOUNT;
+const AZURE_STORAGE_ACCESS_KEY = process.env.AZURE_STORAGE_ACCESS_KEY;
+const STORAGE_DIR = process.env.STORAGE_DIR || '/data/companionservice/';
+const STORAGE_AZURE_BLOB_CONTAINER = process.env.STORAGE_AZURE_BLOB_CONTAINER || 'companionservice';
 
 export default class Storage {
 
@@ -30,15 +33,15 @@ export default class Storage {
       // INCREMENT USER INDEXES
       if (writeSucceeded) {
 
-        if (assetDetail.type == "sentence") {
+        if (assetDetails.type == 'sentence') {
           user.incrementSentenceIndex();
-        } else if (assetDetails.type == "picture") {
+        } else if (assetDetails.type == 'picture') {
           user.incrementPictureIndex();
         }
 
       }
 
-    }
+    };
 
     // BUILD WRITE CALL BACK
     let writeCallback = function (err, result) {

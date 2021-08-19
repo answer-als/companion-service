@@ -1,11 +1,6 @@
-import fs from 'fs';
 import crypto from 'crypto';
-import log from '../../models/log.mjs';
-import appRoot from 'app-root-path';
 import User from '../../models/user.mjs';
 import AppData from '../../models/appData.mjs';
-
-const debug = log('api').debug;
 
 function getSentence (request, response) {
 
@@ -29,6 +24,6 @@ function getSentence (request, response) {
   // RETURN SENTENCE IN RESPONSE
   response.status(200).append('hash', hash).end(sentence.text);
 
-};
+}
 
 export { getSentence };
