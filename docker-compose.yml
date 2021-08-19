@@ -1,19 +1,12 @@
 version: "2"
 services:
   companion-service:
+    container_name: companion-service
     build: ./
     ports:
       - "3000:3000"
     tty: true
     volumes:
-      - .:/usr/src/app
-    command: >
-      sh -c "npm install &&
-             nodemon"
+     - .:/usr/src/app
     env_file:
         - .env
-    labels:
-      - traefik.port=3000
-      - traefik.foo.frontend.rule=Host:service-dev.answerals.org
-      - traefik.bar.frontend.rule=Host:service.answerals.org
-      - traefik.enable=true
