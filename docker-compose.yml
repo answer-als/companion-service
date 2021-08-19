@@ -3,6 +3,7 @@ services:
   companion-service:
     container_name: companion-service
     build: ./
+    command: nodemon --experimental-modules | bunyan
     ports:
       - "3000:3000"
     tty: true

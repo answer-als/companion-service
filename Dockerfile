@@ -19,4 +19,4 @@ RUN apk --update add --no-cache --virtual .gyp \
 
 EXPOSE 3000
 
-CMD nodemon /usr/src/app/app.mjs | bunyan
+CMD [ "node", "--experimental-modules", "app.mjs" ]
