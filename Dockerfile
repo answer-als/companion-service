@@ -14,6 +14,7 @@ RUN apk --update add --no-cache --virtual .gyp \
     && npm -g config set user root \
     && npm install \
     && npm install -g nodemon bunyan \
+    && npm i -g eslint \
     && apk del .gyp
 
 EXPOSE 3000
