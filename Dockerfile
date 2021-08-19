@@ -7,7 +7,7 @@ COPY [".","/usr/src/app"]
 
 WORKDIR /usr/src/app
 
-RUN apk add --update --no-cache --virtual .gyp \
+RUN apk --update add --no-cache --virtual .gyp \
  	  python \
 	  make \
 	  g++ \
