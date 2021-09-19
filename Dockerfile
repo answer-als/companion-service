@@ -10,9 +10,10 @@ WORKDIR /usr/src/app
 RUN apk --update add --no-cache --virtual .gyp \
  	  python \
 	  make \
-	  g++ \
-    && npm -g config set user root \
-    && npm install \
+	  g++
+
+RUN npm -g config set user root \
+    && npm install --loglevel verbose \
     && npm install -g nodemon bunyan \
     && npm i -g eslint \
     && apk del .gyp
