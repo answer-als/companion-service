@@ -1,7 +1,7 @@
 #!/bin/bash
 export DOCKER_HOST=ssh://vm-prod
 tag=$(date '+%Y-%m-%d')-prod
-docker build -t answer-als/companion-service:$tag .
+docker build --no-cache -t answer-als/companion-service:$tag .
 docker stop companion-service
 docker rm companion-service
 docker system prune -f

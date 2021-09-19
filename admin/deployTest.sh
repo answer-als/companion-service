@@ -1,6 +1,6 @@
 #!/bin/bash
 export DOCKER_HOST=ssh://aals-test
-docker build -t companion-service .
+docker build --no-cache -t companion-service .
 docker stop companion-service
 docker rm companion-service
 docker system prune -f
