@@ -10,3 +10,20 @@ collected during clinical visits.
 
 This project, the Answer ALS Companion Service, stores voice files and other data collected by the
 Answer ALS Companion apps for iOS and Android.
+
+# Deployment
+
+Use scripts to deploy:
+
+* `admin/deployTest.sh`
+* `admin/deployProd.sh`
+
+Specify Docker environment variables as such, depending on the environment:
+* `-e AZURE_STORAGE_ACCOUNT=answeralsvoice`
+* `-e AZURE_STORAGE_ACCESS_KEY={AZURE_KEY}`
+
+## Docker
+### Helpful Docker Commands
+#### On Deployed Server
+* `docker ps` - See running containers
+* `docker logs {CONTAINER_ID}` - See logs for specific container
