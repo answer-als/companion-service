@@ -1,6 +1,6 @@
 {
 	"id" : "",
-	"profile" : "",
+	"profile" : [],
 	"sentences" : {
 		"sequence" : [],
 		"current_index" : 0,

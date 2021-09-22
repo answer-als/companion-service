@@ -58,7 +58,8 @@ export default class User {
     }
 
     updateProfile(profile) {
-      this.data.profile = profile;
+      profile.date = moment().format('YYYYMMDD-HHmmss');
+      this.data.profile[] = profile;
     }
 
     // PICTURES
