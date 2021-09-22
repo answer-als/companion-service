@@ -25,7 +25,7 @@ export default class Storage {
     const friendlyName = assetDetails.data.store_name;
 
     // ASSEMBLE FILE NAME
-    const filename = user.id + '_' + friendlyName + '_' + moment().format('YYYYMMDD-HHmmss-SSS') + '.m4a';
+    const filename = user.id + '_' + friendlyName + '_' + moment().format('YYYYMMDD-HHmmss') + '.m4a';
 
     // BUILD USER CALLBACK
     let userCallback = function (writeSucceeded) {
