@@ -1,7 +1,7 @@
 ALS FRS Question
 These questions from the ALSFRS are ordered as they are in the Companion app.
 --------------------------------------------------------------------------------
-QUESTION LEGEND
+== QUESTION LEGEND ==
 Companion Question: {X}
 ALSFRS Question: {N}
 Question: {Text of the ALSFRS.}
@@ -10,6 +10,7 @@ Help Text: {Help text made available in the app.}
 Name            Value           Text
 {AppIdentifier} {ALSFRS Value}  {ALSFRS response text}
 ...
+
 
 --------------------------------------------------------------------------------
 Companion Question: 1
