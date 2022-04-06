@@ -11,6 +11,7 @@ const AZURE_STORAGE_ACCOUNT = process.env.AZURE_STORAGE_ACCOUNT;
 const AZURE_STORAGE_ACCESS_KEY = process.env.AZURE_STORAGE_ACCESS_KEY;
 const STORAGE_DIR = process.env.STORAGE_DIR || '/data/companionservice/';
 const STORAGE_AZURE_BLOB_CONTAINER = process.env.STORAGE_AZURE_BLOB_CONTAINER || 'companionservice';
+const localHost = 'http://127.0.0.1:10000/devstoreaccount1';
 
 export default class Storage {
 
@@ -82,7 +83,7 @@ export default class Storage {
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
     // - CREATE BLOB SERVICE
-    const blobs = storage.createBlobService(AZURE_STORAGE_ACCOUNT, AZURE_STORAGE_ACCESS_KEY);
+    const blobs = storage.createBlobService(AZURE_STORAGE_ACCOUNT, AZURE_STORAGE_ACCESS_KEY, localHost);
     //blobs.logger.level = storage.Logger.LogLevels.DEBUG;
 
     // - CREATE CONTAINER IF NECESSARY
@@ -108,7 +109,26 @@ export default class Storage {
       stream,
       buffer.length,
       {},
-      writeCallback
+      (err, result) => {
+
+        // ERROR ENCOUNTERED
+        if (err) {
+          userCallback(false);
+          callback(err);
+          return;
+        }
+
+        // NO RESULT
+        if (!result) {
+          userCallback(false);
+          callback('Unable to write ' + filename);
+          return;
+        }
+
+        userCallback(true);
+        callback();
+        return;
+      }
     );
 
   }
