@@ -47,14 +47,8 @@ export default class Storage {
     // BUILD WRITE CALL BACK
     let writeCallback = function (err, result) {
 
-      // SUCCESS
-      if (!err & !result) {
-        userCallback(true);
-        callback();
-      }
-
-      // ERROR ENCOUNTERED
-      if (err) {
+       // ERROR ENCOUNTERED
+       if (err) {
         userCallback(false);
         callback(err);
         return;
@@ -66,6 +60,10 @@ export default class Storage {
         callback('Unable to write ' + filename);
         return;
       }
+
+      userCallback(true);
+      callback();
+      return;
 
     };
 
@@ -109,26 +107,7 @@ export default class Storage {
       stream,
       buffer.length,
       {},
-      (err, result) => {
-
-        // ERROR ENCOUNTERED
-        if (err) {
-          userCallback(false);
-          callback(err);
-          return;
-        }
-
-        // NO RESULT
-        if (!result) {
-          userCallback(false);
-          callback('Unable to write ' + filename);
-          return;
-        }
-
-        userCallback(true);
-        callback();
-        return;
-      }
+      writeCallback
     );
 
   }
