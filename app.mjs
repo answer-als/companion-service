@@ -1,5 +1,7 @@
 'use strict';
 
+import 'dotenv/config';
+
 import assert from 'assert';
 
 import log from './models/log.mjs';
