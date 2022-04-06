@@ -3,13 +3,13 @@ let router = express.Router();
 
 import { getRecording, putRecording } from '../viewControllers/api/recording.mjs';
 import { getProfile, putProfile, putProfile2 } from '../viewControllers/api/profile.mjs';
-import { getSentence } from '../viewControllers/api/sentence.mjs';
-import { getPicture } from '../viewControllers/api/picture.mjs';
+import { getSentence, getSentence2 } from '../viewControllers/api/sentence.mjs';
+import { getPicture, getPicture2 } from '../viewControllers/api/picture.mjs';
 import { getHealth } from '../viewControllers/api/public.mjs';
 
 // RECORDING
-router.put('/api/v1/recording/:userid/:hash', putRecording);
 router.get('/api/v1/recording/:hash', getRecording);
+router.put('/api/v1/recording/:userid/:hash', putRecording);
 
 // PROFILE
 router.get('/api/v1/profile/:userid', getProfile);
@@ -18,9 +18,11 @@ router.put('/api/v2/profile/:userid', putProfile2);
 
 // SENTENCE
 router.get('/api/v1/sentence/:userid', getSentence);
+router.get('/api/v2/sentence/:userid', getSentence2);
 
 // PICTURE
 router.get('/api/v1/picture/:userid', getPicture);
+router.get('/api/v2/picture/:userid', getPicture2);
 
 // PUBLIC
 router.get('/api/v1/health', getHealth);

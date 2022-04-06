@@ -1,10 +1,8 @@
-import crypto from 'crypto';
 import User from '../../models/user.mjs';
 import AppData from '../../models/appData.mjs';
 
 function getSentence (request, response) {
 
-  const sha1sum = crypto.createHash('sha1');
   const appData = new AppData();
 
   // GET USER ID FROM REQUEST
@@ -17,13 +15,33 @@ function getSentence (request, response) {
   const sentenceNumber = user.getCurrentSentenceNumber();
   const sentence = appData.getSentence(sentenceNumber);
 
-  // TODO PREDETERMINE THE HASH
-  sha1sum.update(sentence.text);
-  const hash = sha1sum.digest('hex');
-
   // RETURN SENTENCE IN RESPONSE
-  response.status(200).append('hash', hash).end(sentence.text);
-
+  response.status(200).append('hash', sentence.hash).end(sentence.text);
 }
 
-export { getSentence };
+function getSentence2 (request, response) {
+
+  const appData = new AppData();
+
+  // GET USER ID FROM REQUEST
+  const userid = request.params.userid;
+
+  // GET USER DATA WITH ID
+  var user = new User(userid);
+
+  // REQUEST NEXT SENTENCE
+  const sentenceNumber = user.getCurrentSentenceNumber();
+  const sentence = appData.getSentence(sentenceNumber);
+
+  var payload = {
+    hash: sentence.hash,
+    sentenceText: sentence.text
+  };
+
+  // RETURN SENTENCE IN RESPONSE
+  response.writeHead(200, { 'Content-Type': 'application/json' });
+  response.write(JSON.stringify(payload));
+  response.end();
+}
+
+export { getSentence, getSentence2};
