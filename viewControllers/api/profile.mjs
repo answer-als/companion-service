@@ -28,7 +28,7 @@ function putProfile (request, response) {
 
   let profile = {
     profileData: profileData,
-    date: moment().format('YYYYMMDD-HHmmss')
+    timestamp: moment().format('YYYYMMDD-HHmmss')
   };
 
   user.updateProfile(profile);
@@ -38,4 +38,25 @@ function putProfile (request, response) {
 
 }
 
-export { getProfile, putProfile };
+function putProfile2 (request, response) {
+
+  const userid = request.params.userid;
+  const appData = new AppData();
+
+  var user = new User(userid, appData);
+
+  const questionnaireResult = request.body;
+
+  let profile = {
+    profileData: questionnaireResult.profileData,
+    timestamp: questionnaireResult.timestamp
+  };
+
+  user.updateProfile(profile);
+  user.writeUserData();
+
+  response.status(200).end('ok');
+
+}
+
+export { getProfile, putProfile, putProfile2 };
