@@ -11,7 +11,9 @@ const AZURE_STORAGE_ACCOUNT = process.env.AZURE_STORAGE_ACCOUNT;
 const AZURE_STORAGE_ACCESS_KEY = process.env.AZURE_STORAGE_ACCESS_KEY;
 const STORAGE_DIR = process.env.STORAGE_DIR || '/data/companionservice/';
 const STORAGE_AZURE_BLOB_CONTAINER = process.env.STORAGE_AZURE_BLOB_CONTAINER || 'companionservice';
-const localHost = 'http://127.0.0.1:10000/devstoreaccount1';
+
+//TODO: Remove before deploying
+//const localHost = 'http://127.0.0.1:10000/devstoreaccount1';
 
 export default class Storage {
 
@@ -81,7 +83,10 @@ export default class Storage {
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
     // - CREATE BLOB SERVICE
-    const blobs = storage.createBlobService(AZURE_STORAGE_ACCOUNT, AZURE_STORAGE_ACCESS_KEY, localHost);
+    const blobs = storage.createBlobService(AZURE_STORAGE_ACCOUNT, AZURE_STORAGE_ACCESS_KEY);
+
+    //For Dev:
+    //const blobs = storage.createBlobService(AZURE_STORAGE_ACCOUNT, AZURE_STORAGE_ACCESS_KEY, localHost);
     //blobs.logger.level = storage.Logger.LogLevels.DEBUG;
 
     // - CREATE CONTAINER IF NECESSARY
