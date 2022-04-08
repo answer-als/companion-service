@@ -18,15 +18,24 @@ export default class AppData {
     // ASSETS
     getAssetDetails(testHash) {
 
-      var details = {};
+      var details = {
+        data:{}
+      };
 
       // TASKS
       if (testHash == 'CountingTask') {
         details.type = 'counting-task';
+        details.data.store_name = 'counting-task';
       }
 
       if (testHash == 'AhTask') {
         details.type = 'ah-task';
+        details.data.store_name = 'ah-task';
+      }
+
+      if (testHash == 'Pass') {
+        details.type = 'pass-task';
+        details.data.store_name = 'pass-task';
       }
 
       // SENTENCES

@@ -1,5 +1,6 @@
 import User from '../../models/user.mjs';
 import AppData from '../../models/appData.mjs';
+import moment from 'moment';
 
 function getProfile (request, response) {
 
@@ -17,13 +18,13 @@ function getProfile (request, response) {
 
 function putProfile (request, response) {
 
-  const body = request.body;
+  const profile = request.body;
   const userid = request.params.userid;
   const appData = new AppData();
 
   var user = new User(userid, appData);
 
-  const profile = JSON.stringify(body);
+  profile.date = moment().format('YYYYMMDD-HHmmss');
 
   user.updateProfile(profile);
   user.writeUserData();
@@ -32,4 +33,23 @@ function putProfile (request, response) {
 
 }
 
-export { getProfile, putProfile };
+function putProfile2 (request, response) {
+
+  const userid = request.params.userid;
+  const appData = new AppData();
+
+  var user = new User(userid, appData);
+
+  const questionnaireResult = request.body;
+
+  let profile = JSON.parse(questionnaireResult.profileData);
+  profile.date = questionnaireResult.timestamp;
+
+  user.updateProfile(profile);
+  user.writeUserData();
+
+  response.status(200).end('ok');
+
+}
+
+export { getProfile, putProfile, putProfile2 };
