@@ -3,14 +3,15 @@
 import fs from 'fs';
 import moment from 'moment';
 import appRoot from 'app-root-path';
+import AppData from './appData.mjs';
 
 export default class User {
 
-    constructor(id, appData = null) {
+    constructor(id) {
       this.id = id;
       this.userFilePath = appRoot + '/data/users/' + this.id + '.json';
       this.userTemplatePath = appRoot + '/data/user-template.json';
-      this.appData = appData;
+      this.appData = new AppData();
       this.loadUserData();
     }
 

@@ -1,6 +1,5 @@
 'use strict';
-//For Importing .env content for Dev:
-//import 'dotenv/config';
+import 'dotenv/config';
 
 import assert from 'assert';
 
@@ -73,3 +72,10 @@ app.set('port', process.env.PORT || 3000);
 var server = app.listen(app.get('port'), () => {
   debug('Listening on ' + server.address().port);
 });
+
+
+//Manual Docker Build and Push:
+//docker build -f .\Dockerfile -t aals-companion-service:release.20220408-1 .
+//echo "$MY_PASSWORD" | docker login  aucincacr.azurecr.io -u AucIncACR --password-stdin
+//docker tag aals-companion-service:release.20220408-1 aucincacr.azurecr.io/aals-companion-service:release.20220408-1
+//docker push aucincacr.azurecr.io/aals-companion-service:release.20220408-1
