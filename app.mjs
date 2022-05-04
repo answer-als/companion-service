@@ -41,9 +41,9 @@ app.use(express.static('public'));
 hbs.registerPartials('./views/partials');
 app.set('view engine', 'hbs');
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded( { extended: false }));
-app.use(bodyParser.raw( { limit: '10000kb' }));
+app.use(bodyParser.json({limit: '100mb', extended: true}));
+app.use(bodyParser.urlencoded( {limit: '100mb', extended: true}));
+app.use(bodyParser.raw( {limit: '100mb', extended: true}));
 
 app.use(cors());
 
