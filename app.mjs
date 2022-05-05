@@ -76,6 +76,6 @@ var server = app.listen(app.get('port'), () => {
 
 //Manual Docker Build and Push:
 //docker build -f .\Dockerfile -t aals-companion-service:release.20220408-1 .
-//echo "$MY_PASSWORD" | docker login  aucincacr.azurecr.io -u AucIncACR --password-stdin
-//docker tag aals-companion-service:release.20220408-1 aucincacr.azurecr.io/aals-companion-service:release.20220408-1
-//docker push aucincacr.azurecr.io/aals-companion-service:release.20220408-1
+//echo "$MY_PASSWORD" | docker login  aalsacr.azurecr.io -u aalsacr --password-stdin
+//docker tag aals-companion-service:release.20220408-1 aalsacr.azurecr.io/aals-companion-service:release.20220408-1
+//docker push aalsacr.azurecr.io/aals-companion-service:release.20220408-1
