@@ -83,7 +83,7 @@ export default class Storage {
 
     var blobs = storage.createBlobService(AZURE_STORAGE_ACCOUNT, AZURE_STORAGE_ACCESS_KEY);
 
-    if(process.env.NODE_ENV === 'DEV'){
+    if(process.env.NODE_ENV === 'DEBUG'){
       const localHost = 'http://127.0.0.1:10000/devstoreaccount1';
       blobs = storage.createBlobService(AZURE_STORAGE_ACCOUNT, AZURE_STORAGE_ACCESS_KEY, localHost);
       blobs.logger.level = storage.Logger.LogLevels.DEBUG;
