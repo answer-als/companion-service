@@ -6,6 +6,7 @@ import { getProfile, putProfile, putProfile2 } from '../viewControllers/api/prof
 import { getSentence, getSentence2 } from '../viewControllers/api/sentence.mjs';
 import { getPicture, getPicture2 } from '../viewControllers/api/picture.mjs';
 import { getHealth } from '../viewControllers/api/public.mjs';
+import { putRoads } from '../viewControllers/api/roads.mjs';
 
 // RECORDING
 router.get('/api/v1/recording/:hash', getRecording);
@@ -26,5 +27,8 @@ router.get('/api/v2/picture/:userid', getPicture2);
 
 // PUBLIC
 router.get('/api/v1/health', getHealth);
+
+// ROADS
+router.put('/api/v1/roads', putRoads);
 
 export default router;
