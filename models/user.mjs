@@ -1,10 +1,14 @@
 'use strict';
 
+import log from './log.mjs';
 import fs from 'fs';
 import moment from 'moment';
 import appRoot from 'app-root-path';
 import AppData from './appData.mjs';
 import Storage from './storage.mjs';
+
+
+const error = log('api').error;
 
 export default class User {
 
@@ -22,6 +26,7 @@ export default class User {
 
       let getData = function(err,userData){
         if(err){
+          error('Error loading user data: ' + err);
           callback(err);
         }else{
           self.data = userData;
@@ -30,10 +35,21 @@ export default class User {
       };
 
       this.storage.doesUserDataExist(self.id, function(err, doesExist){
+
+        if(err){
+          callback(err);
+          return;
+        }
+
         if(doesExist){
           self.storage.getUserData(self.id, function(err, blobContent){
+            if(err){
+              callback(err);
+              return;
+            }
+
             let data = JSON.parse(blobContent);
-            getData(err, data);
+            getData(null, data);
           });
         }else{
           this.createUserData(getData);
@@ -59,11 +75,16 @@ export default class User {
     }
 
     writeUserData() {
-      let storage = new Storage(this.appData);
+      let self = this;
 
-      storage.saveUserData(this.data, function(err, result){
-        if(err || !(result.exists && result.created)){
-          //TODO: write to local host
+      this.storage.saveUserData(self.data, function(err){
+
+        //If there's an error with azure storage account, save locally.
+        if(err){
+          error('Error saving to Azure Storage: ' + err);
+
+          const data = JSON.stringify(self.data);
+          fs.writeFileSync(self.userFilePath, data);
         }
       });
     }
@@ -105,7 +126,6 @@ export default class User {
       this.data.pictures.current_index = newIndex;
 
       this.writeUserData();
-
     }
 
     // SENTENCES
@@ -128,7 +148,5 @@ export default class User {
       this.data.sentences.current_index = newIndex;
 
       this.writeUserData();
-
     }
-
 }

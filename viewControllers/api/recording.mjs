@@ -29,8 +29,6 @@ function putRecording (request, response) {
   const appData = new AppData();
   const storage = new Storage(appData);
 
-  var user = new User(userid, appData);
-
   // RESPONSE CALL BACK
   let callback = function(err) {
 
@@ -44,9 +42,15 @@ function putRecording (request, response) {
 
   };
 
-  // WRITE TO STORAGE
-  storage.write(user, hash, buffer, callback);
+  var user = new User(userid, appData);
 
+  user.loadUserData(function(err, user){
+    if(err){
+      response.status(500).end('Error loading user data.');
+    }else{
+      storage.saveRecording(user, hash, buffer, callback);
+    }
+  });
 }
 
 export { getRecording, putRecording };
