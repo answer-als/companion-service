@@ -81,29 +81,7 @@ export default class Storage {
 
     // - CREATE BLOB SERVICE
 
-    var blobs = storage.createBlobService(AZURE_STORAGE_ACCOUNT, AZURE_STORAGE_ACCESS_KEY);
-
-    if(process.env.NODE_ENV === 'DEBUG'){
-      const localHost = 'http://127.0.0.1:10000/devstoreaccount1';
-      blobs = storage.createBlobService(AZURE_STORAGE_ACCOUNT, AZURE_STORAGE_ACCESS_KEY, localHost);
-      blobs.logger.level = storage.Logger.LogLevels.DEBUG;
-    }
-
-    // - CREATE CONTAINER IF NECESSARY
-    blobs.createContainerIfNotExists(
-      STORAGE_AZURE_BLOB_CONTAINER,
-      (err, result) => {
-
-        if (err) {
-          error(err);
-        }
-
-        if (!result) {
-          error('Unable to create container ' + STORAGE_AZURE_BLOB_CONTAINER);
-        }
-
-      }
-    );
+    var blobs = this.getBlobService();
 
     // - WRITE FILE TO BLOB
     blobs.createBlockBlobFromStream(
@@ -117,7 +95,71 @@ export default class Storage {
 
   }
 
+  doesUserDataExist(userId,callback){
+    var blobService = this.getBlobService();
+
+    blobService.getBlobProperties(
+      STORAGE_AZURE_BLOB_CONTAINER,
+      userId,
+      function(err, properties, response) {
+        callback(err, response.isSuccessful);
+      });
+  }
+
+  getUserData(userId, callback){
+    var blobService = this.getBlobService();
+
+    blobService.getBlobToText(
+      STORAGE_AZURE_BLOB_CONTAINER,
+      userId,
+      function(err, blobContent) {
+        callback(err, blobContent);
+      });
+  }
+
+  saveUserData(userData, callback){
+    var blobService = this.getBlobService();
+
+    blobService.createBlockBlobFromText(
+      STORAGE_AZURE_BLOB_CONTAINER,
+      userData.id,
+      JSON.stringify(userData),
+      function(error, result){
+        callback(error, result);
+    });
+  }
+
+  getBlobService(){
+
+    var blobs = storage.createBlobService(AZURE_STORAGE_ACCOUNT, AZURE_STORAGE_ACCESS_KEY);
+
+      if(process.env.NODE_ENV === 'DEBUG'){
+        const localHost = 'http://127.0.0.1:10000/devstoreaccount1';
+        blobs = storage.createBlobService(AZURE_STORAGE_ACCOUNT, AZURE_STORAGE_ACCESS_KEY, localHost);
+        blobs.logger.level = storage.Logger.LogLevels.DEBUG;
+      }
+
+      // - CREATE CONTAINER IF NECESSARY
+      blobs.createContainerIfNotExists(
+        STORAGE_AZURE_BLOB_CONTAINER,
+        (err, result) => {
+
+          if (err) {
+            error(err);
+          }
+
+          if (!result) {
+            error('Unable to create container ' + STORAGE_AZURE_BLOB_CONTAINER);
+          }
+
+        }
+      );
+
+      return blobs;
+  }
 }
+
+
 
 // const storageDir = '/data/companionservice/';
 // const storageContainer = 'companionservice';

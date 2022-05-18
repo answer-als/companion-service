@@ -39,17 +39,17 @@ function putProfile2 (request, response) {
   const appData = new AppData();
 
   var user = new User(userid, appData);
+  user.loadUserData(function(err, user){
+    const questionnaireResult = request.body;
 
-  const questionnaireResult = request.body;
+    let profile = JSON.parse(questionnaireResult.profileData);
+    profile.date = questionnaireResult.timestamp;
 
-  let profile = JSON.parse(questionnaireResult.profileData);
-  profile.date = questionnaireResult.timestamp;
+    user.updateProfile(profile);
+    user.writeUserData();
 
-  user.updateProfile(profile);
-  user.writeUserData();
-
-  response.status(200).end('ok');
-
+    response.status(200).end('ok');
+  });
 }
 
 export { getProfile, putProfile, putProfile2 };

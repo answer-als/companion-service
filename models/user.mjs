@@ -4,6 +4,7 @@ import fs from 'fs';
 import moment from 'moment';
 import appRoot from 'app-root-path';
 import AppData from './appData.mjs';
+import Storage from './storage.mjs';
 
 export default class User {
 
@@ -12,45 +13,59 @@ export default class User {
       this.userFilePath = appRoot + '/data/users/' + this.id + '.json';
       this.userTemplatePath = appRoot + '/data/user-template.json';
       this.appData = new AppData();
-      this.loadUserData();
+      this.storage = new Storage(this.appData);
     }
 
     // USER DATA
-    loadUserData() {
+    loadUserData(callback) {
+      let self = this;
 
-      // TODO THIS SHOULD LOAD AND WRITE TO AZURE BLOB
+      let getData = function(err,userData){
+        if(err){
+          callback(err);
+        }else{
+          self.data = userData;
+          callback(null, self);
+        }
+      };
 
-      if (!fs.existsSync(this.userFilePath)) {
-        this.createUserData();
-      } else {
-        const rawData = fs.readFileSync(this.userFilePath);
-        this.data = JSON.parse(rawData);
-      }
-
+      this.storage.doesUserDataExist(self.id, function(err, doesExist){
+        if(doesExist){
+          self.storage.getUserData(self.id, function(err, blobContent){
+            let data = JSON.parse(blobContent);
+            getData(err, data);
+          });
+        }else{
+          this.createUserData(getData);
+        }
+      });
     }
 
-    createUserData() {
-
-      // TODO THIS SHOULD LOAD AND WRITE TO AZURE BLOB
-
+    createUserData(getData) {
       const rawTemplateData = fs.readFileSync(this.userTemplatePath);
 
-      this.data = JSON.parse(rawTemplateData);
+      let data = JSON.parse(rawTemplateData);
 
       this.data.id = this.id;
       this.created_at = moment();
 
       // INITIALIZE PICTURES
       this.data.pictures.sequence = this.appData.getRandomPictureSequence();
+
       // INITIALIZE SENTENCES
       this.data.sentences.sequence = this.appData.getRandomSentenceSequence();
 
-      this.writeUserData();
+      getData(null, data);
     }
 
     writeUserData() {
-      const data = JSON.stringify(this.data);
-      fs.writeFileSync(this.userFilePath, data);
+      let storage = new Storage(this.appData);
+
+      storage.saveUserData(this.data, function(err, result){
+        if(err || !(result.exists && result.created)){
+          //TODO: write to local host
+        }
+      });
     }
 
     // PROFILE
