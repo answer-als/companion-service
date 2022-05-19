@@ -7,7 +7,6 @@ import appRoot from 'app-root-path';
 import AppData from './appData.mjs';
 import Storage from './storage.mjs';
 
-
 const error = log('api').error;
 
 export default class User {
@@ -39,8 +38,18 @@ export default class User {
         if(err)
         {
           if(err.statusCode !== 404){
-            callback(err);
-            return;
+            error('Error determining whether user exists: ' + err);
+
+            if (!fs.existsSync(self.userFilePath))
+            {
+              self.createUserData(getData);
+              return;
+            }else{
+              const rawData = fs.readFileSync(self.userFilePath);
+              let data = JSON.parse(rawData);
+              getData(null, data);
+              return;
+            }
           }else{
             self.createUserData(getData);
             return;
@@ -49,8 +58,18 @@ export default class User {
 
         self.storage.getUserData(self.id, function(err, blobContent){
           if(err){
-            callback(err);
-            return;
+            error('Error getting user data: ' + err);
+
+            if (!fs.existsSync(self.userFilePath))
+            {
+              self.createUserData(getData);
+              return;
+            }else{
+              const rawData = fs.readFileSync(self.userFilePath);
+              let data = JSON.parse(rawData);
+              getData(null, data);
+              return;
+            }
           }
 
           let data = JSON.parse(blobContent);
@@ -58,6 +77,7 @@ export default class User {
         });
       });
     }
+
 
     createUserData(getData) {
       const rawTemplateData = fs.readFileSync(this.userTemplatePath);
@@ -73,12 +93,12 @@ export default class User {
       // INITIALIZE SENTENCES
       this.data.sentences.sequence = this.appData.getRandomSentenceSequence();
 
-      this.writeUserData();
-
-      getData(null, data);
+      this.writeUserData(function(data){
+        getData(null, data);
+      });
     }
 
-    writeUserData() {
+    writeUserData(callback) {
       let self = this;
 
       this.storage.saveUserData(self.data, function(err){
@@ -89,6 +109,10 @@ export default class User {
 
           const data = JSON.stringify(self.data);
           fs.writeFileSync(self.userFilePath, data);
+        }
+
+        if(callback){
+          callback(self.data);
         }
       });
     }

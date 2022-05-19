@@ -27,21 +27,27 @@ function getSentence2 (request, response) {
   const userid = request.params.userid;
 
   // GET USER DATA WITH ID
-  var user = new User(userid);
+  var user = new User(userid, appData);
 
-  // REQUEST NEXT SENTENCE
-  const sentenceNumber = user.getCurrentSentenceNumber();
-  const sentence = appData.getSentence(sentenceNumber);
+  user.loadUserData(function(err, user){
+    if(err){
+      response.status(500).end('Error loading user data.');
+    }else{
+      // REQUEST NEXT SENTENCE
+      const sentenceNumber = user.getCurrentSentenceNumber();
+      const sentence = appData.getSentence(sentenceNumber);
 
-  var payload = {
-    hash: sentence.hash,
-    sentenceText: sentence.text
-  };
+      var payload = {
+        hash: sentence.hash,
+        sentenceText: sentence.text
+      };
 
-  // RETURN SENTENCE IN RESPONSE
-  response.writeHead(200, { 'Content-Type': 'application/json' });
-  response.write(JSON.stringify(payload));
-  response.end();
+      // RETURN SENTENCE IN RESPONSE
+      response.writeHead(200, { 'Content-Type': 'application/json' });
+      response.write(JSON.stringify(payload));
+      response.end();
+    }
+  });
 }
 
 export { getSentence, getSentence2};

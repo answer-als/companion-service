@@ -49,9 +49,9 @@ function putProfile2 (request, response) {
       profile.date = questionnaireResult.timestamp;
 
       user.updateProfile(profile);
-      user.writeUserData();
-
-      response.status(200).end('ok');
+      user.writeUserData(function(){
+        response.status(200).end('ok');
+      });
     }
   });
 }

@@ -16,9 +16,9 @@ function putRoads (request, response) {
       profile.date = questionnaireResult.timestamp;
 
       user.updateRoads(profile);
-      user.writeUserData();
-
-      response.status(200).end('ok');
+      user.writeUserData(function(){
+        response.status(200).end('ok');
+      });
     }
   });
 }

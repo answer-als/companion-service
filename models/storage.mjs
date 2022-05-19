@@ -4,13 +4,18 @@ import moment from 'moment';
 import storage from 'azure-storage';
 import { PassThrough } from 'stream';
 
-const error = log('api').error;
+const logError = log('api').error;
 
 // JUST TO PLEASE THE LINTER FOR NOW
 const AZURE_STORAGE_ACCOUNT = process.env.AZURE_STORAGE_ACCOUNT;
 const AZURE_STORAGE_ACCESS_KEY = process.env.AZURE_STORAGE_ACCESS_KEY;
-const STORAGE_DIR = process.env.STORAGE_DIR || '/data/companionservice/';
 const STORAGE_AZURE_BLOB_CONTAINER = process.env.STORAGE_AZURE_BLOB_CONTAINER || 'companionservice';
+
+var STORAGE_DIR = process.env.STORAGE_DIR || '/data/companionservice/';
+
+if(process.env.NODE_ENV === 'DEBUG'){
+  STORAGE_DIR = 'C:/DATA/Code/Cotingasoft/AnswerALS/companion-service/data/companionservice/';
+}
 
 export default class Storage {
 
@@ -60,7 +65,6 @@ export default class Storage {
       userCallback(true);
       callback();
       return;
-
     };
 
     // WRITE FILE TO STORAGE
@@ -68,7 +72,6 @@ export default class Storage {
     stream.end(buffer);
 
     // - CREATE BLOB SERVICE
-
     var blobs = this.getBlobService();
 
     // - WRITE FILE TO BLOB
@@ -80,10 +83,9 @@ export default class Storage {
       {},
       function(error, result){
         if(error){
-          error('Error saving to Azure Storage: ' + error);
+          logError('Error saving to Azure Storage: ' + error);
           fs.writeFileSync(STORAGE_DIR + filename, buffer);
-          //TODO: Probably shouldn't return an error...
-          writeCallback(error);
+          writeCallback(null, true);
           return;
         }
 
@@ -91,7 +93,6 @@ export default class Storage {
         return;
       }
     );
-
   }
 
   doesUserDataExist(userId,callback){
@@ -100,19 +101,19 @@ export default class Storage {
     blobService.getBlobProperties(
       STORAGE_AZURE_BLOB_CONTAINER,
       userId,
-      function(err, properties, response) {
+      function(err) {
+        if(err)
+        {
+          if(err.statusCode !== 404){
+            logError('Error determining whether user exists: ' + err);
+          }
 
-        if(err){
           callback(err);
           return;
         }
 
-        if(response){
-          callback(null, response.isSuccessful);
-          return;
-        }
-
-        callback('Azure Storage Response not available.');
+        callback(null);
+        return;
       });
   }
 
@@ -155,11 +156,11 @@ export default class Storage {
         (err, result) => {
 
           if (err) {
-            error(err);
+            logError(err);
           }
 
           if (!result) {
-            error('Unable to create container ' + STORAGE_AZURE_BLOB_CONTAINER);
+            logError('Unable to create container ' + STORAGE_AZURE_BLOB_CONTAINER);
           }
 
         }
