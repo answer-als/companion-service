@@ -62,6 +62,14 @@ export default class User {
       this.data.profile.push(profile);
     }
 
+    updateRoads(roadsResult){
+      if(!this.data.roads){
+        this.data.roads = [];
+      }
+
+      this.data.roads.push(roadsResult);
+    }
+
     // PICTURES
     getCurrentPictureNumber() {
       return this.data.pictures.sequence[this.data.pictures.current_index];
