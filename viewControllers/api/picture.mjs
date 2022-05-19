@@ -29,23 +29,29 @@ function getPicture2(request, response) {
   const userid = request.params.userid;
 
   // GET USER DATA WITH ID
-  var user = new User(userid);
+  var user = new User(userid, appData);
 
-  // REQUEST NEXT SENTENCE
-  const pictureNumber = user.getCurrentPictureNumber();
-  const picture = appData.getPicture(pictureNumber);
+  user.loadUserData(function(err, user){
+    if(err){
+      response.status(500).end('Error loading user data.');
+    }else{
+      // REQUEST NEXT SENTENCE
+      const pictureNumber = user.getCurrentPictureNumber();
+      const picture = appData.getPicture(pictureNumber);
 
-  const photo = fs.readFileSync(appRoot + '/public/photos/' + picture.file);
+      const photo = fs.readFileSync(appRoot + '/public/photos/' + picture.file);
 
-  var payload = {
-    hash: picture.hash,
-    imageBase64: photo.toString('base64')
-  };
+      var payload = {
+        hash: picture.hash,
+        imageBase64: photo.toString('base64')
+      };
 
-  // RETURN SENTENCE IN RESPONSE
-  response.writeHead(200, { 'Content-Type': 'application/json' });
-  response.write(JSON.stringify(payload));
-  response.end();
+      // RETURN SENTENCE IN RESPONSE
+      response.writeHead(200, { 'Content-Type': 'application/json' });
+      response.write(JSON.stringify(payload));
+      response.end();
+    }
+  });
 }
 
 export { getPicture, getPicture2 };

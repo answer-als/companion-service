@@ -1,9 +1,13 @@
 'use strict';
 
+import log from './log.mjs';
 import fs from 'fs';
 import moment from 'moment';
 import appRoot from 'app-root-path';
 import AppData from './appData.mjs';
+import Storage from './storage.mjs';
+
+const error = log('api').error;
 
 export default class User {
 
@@ -12,45 +16,105 @@ export default class User {
       this.userFilePath = appRoot + '/data/users/' + this.id + '.json';
       this.userTemplatePath = appRoot + '/data/user-template.json';
       this.appData = new AppData();
-      this.loadUserData();
+      this.storage = new Storage(this.appData);
     }
 
     // USER DATA
-    loadUserData() {
+    loadUserData(callback) {
+      let self = this;
 
-      // TODO THIS SHOULD LOAD AND WRITE TO AZURE BLOB
+      let getData = function(err,userData){
+        if(err){
+          error('Error loading user data: ' + err);
+          callback(err);
+        }else{
+          self.data = userData;
+          callback(null, self);
+        }
+      };
 
-      if (!fs.existsSync(this.userFilePath)) {
-        this.createUserData();
-      } else {
-        const rawData = fs.readFileSync(this.userFilePath);
-        this.data = JSON.parse(rawData);
-      }
+      this.storage.doesUserDataExist(self.id, function(err){
 
+        if(err)
+        {
+          if(err.statusCode !== 404){
+            error('Error determining whether user exists: ' + err);
+
+            if (!fs.existsSync(self.userFilePath))
+            {
+              self.createUserData(getData);
+              return;
+            }else{
+              const rawData = fs.readFileSync(self.userFilePath);
+              let data = JSON.parse(rawData);
+              getData(null, data);
+              return;
+            }
+          }else{
+            self.createUserData(getData);
+            return;
+          }
+        }
+
+        self.storage.getUserData(self.id, function(err, blobContent){
+          if(err){
+            error('Error getting user data: ' + err);
+
+            if (!fs.existsSync(self.userFilePath))
+            {
+              self.createUserData(getData);
+              return;
+            }else{
+              const rawData = fs.readFileSync(self.userFilePath);
+              let data = JSON.parse(rawData);
+              getData(null, data);
+              return;
+            }
+          }
+
+          let data = JSON.parse(blobContent);
+          getData(null, data);
+        });
+      });
     }
 
-    createUserData() {
 
-      // TODO THIS SHOULD LOAD AND WRITE TO AZURE BLOB
-
+    createUserData(getData) {
       const rawTemplateData = fs.readFileSync(this.userTemplatePath);
 
-      this.data = JSON.parse(rawTemplateData);
-
+      let data = JSON.parse(rawTemplateData);
+      this.data = data;
       this.data.id = this.id;
       this.created_at = moment();
 
       // INITIALIZE PICTURES
       this.data.pictures.sequence = this.appData.getRandomPictureSequence();
+
       // INITIALIZE SENTENCES
       this.data.sentences.sequence = this.appData.getRandomSentenceSequence();
 
-      this.writeUserData();
+      this.writeUserData(function(data){
+        getData(null, data);
+      });
     }
 
-    writeUserData() {
-      const data = JSON.stringify(this.data);
-      fs.writeFileSync(this.userFilePath, data);
+    writeUserData(callback) {
+      let self = this;
+
+      this.storage.saveUserData(self.data, function(err){
+
+        //If there's an error with azure storage account, save locally.
+        if(err){
+          error('Error saving to Azure Storage: ' + err);
+
+          const data = JSON.stringify(self.data);
+          fs.writeFileSync(self.userFilePath, data);
+        }
+
+        if(callback){
+          callback(self.data);
+        }
+      });
     }
 
     // PROFILE
@@ -90,7 +154,6 @@ export default class User {
       this.data.pictures.current_index = newIndex;
 
       this.writeUserData();
-
     }
 
     // SENTENCES
@@ -113,7 +176,5 @@ export default class User {
       this.data.sentences.current_index = newIndex;
 
       this.writeUserData();
-
     }
-
 }

@@ -8,13 +8,19 @@ function putRoads (request, response) {
 
   var user = new User(questionnaireResult.userId, appData);
 
-  let profile = JSON.parse(questionnaireResult.profileData);
-  profile.date = questionnaireResult.timestamp;
+  user.loadUserData(function(err, user){
+    if(err){
+      response.status(500).end('Error saving ROADS results.');
+    }else{
+      let profile = JSON.parse(questionnaireResult.profileData);
+      profile.date = questionnaireResult.timestamp;
 
-  user.updateRoads(profile);
-  user.writeUserData();
-
-  response.status(200).end('ok');
-
+      user.updateRoads(profile);
+      user.writeUserData(function(){
+        response.status(200).end('ok');
+      });
+    }
+  });
 }
- export {putRoads};
+
+export {putRoads};

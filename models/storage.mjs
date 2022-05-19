@@ -4,13 +4,18 @@ import moment from 'moment';
 import storage from 'azure-storage';
 import { PassThrough } from 'stream';
 
-const error = log('api').error;
+const logError = log('api').error;
 
 // JUST TO PLEASE THE LINTER FOR NOW
 const AZURE_STORAGE_ACCOUNT = process.env.AZURE_STORAGE_ACCOUNT;
 const AZURE_STORAGE_ACCESS_KEY = process.env.AZURE_STORAGE_ACCESS_KEY;
-const STORAGE_DIR = process.env.STORAGE_DIR || '/data/companionservice/';
 const STORAGE_AZURE_BLOB_CONTAINER = process.env.STORAGE_AZURE_BLOB_CONTAINER || 'companionservice';
+
+var STORAGE_DIR = process.env.STORAGE_DIR || '/data/companionservice/';
+
+if(process.env.NODE_ENV === 'DEBUG'){
+  STORAGE_DIR = 'C:/DATA/Code/Cotingasoft/AnswerALS/companion-service/data/companionservice/';
+}
 
 export default class Storage {
 
@@ -18,7 +23,7 @@ export default class Storage {
     this.appData = appData;
   }
 
-  write(user, hash, buffer, callback) {
+  saveRecording(user, hash, buffer, callback) {
 
     // GET FILE DETAILS
     const assetDetails = this.appData.getAssetDetails(hash);
@@ -29,7 +34,6 @@ export default class Storage {
 
     // BUILD USER CALLBACK
     let userCallback = function (writeSucceeded) {
-
       // INCREMENT USER INDEXES
       if (writeSucceeded) {
 
@@ -38,9 +42,7 @@ export default class Storage {
         } else if (assetDetails.type == 'picture') {
           user.incrementPictureIndex();
         }
-
       }
-
     };
 
     // BUILD WRITE CALL BACK
@@ -63,47 +65,14 @@ export default class Storage {
       userCallback(true);
       callback();
       return;
-
     };
 
     // WRITE FILE TO STORAGE
     const stream = new PassThrough();
-
     stream.end(buffer);
 
-    // !!!! WHAT DOES THIS DO? >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    if (!fs.existsSync(STORAGE_DIR)) {
-      fs.mkdirSync(STORAGE_DIR);
-    }
-
-    fs.writeFileSync(STORAGE_DIR + filename, buffer);
-    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
     // - CREATE BLOB SERVICE
-
-    var blobs = storage.createBlobService(AZURE_STORAGE_ACCOUNT, AZURE_STORAGE_ACCESS_KEY);
-
-    if(process.env.NODE_ENV === 'DEBUG'){
-      const localHost = 'http://127.0.0.1:10000/devstoreaccount1';
-      blobs = storage.createBlobService(AZURE_STORAGE_ACCOUNT, AZURE_STORAGE_ACCESS_KEY, localHost);
-      blobs.logger.level = storage.Logger.LogLevels.DEBUG;
-    }
-
-    // - CREATE CONTAINER IF NECESSARY
-    blobs.createContainerIfNotExists(
-      STORAGE_AZURE_BLOB_CONTAINER,
-      (err, result) => {
-
-        if (err) {
-          error(err);
-        }
-
-        if (!result) {
-          error('Unable to create container ' + STORAGE_AZURE_BLOB_CONTAINER);
-        }
-
-      }
-    );
+    var blobs = this.getBlobService();
 
     // - WRITE FILE TO BLOB
     blobs.createBlockBlobFromStream(
@@ -112,71 +81,91 @@ export default class Storage {
       stream,
       buffer.length,
       {},
-      writeCallback
-    );
+      function(error, result){
+        if(error){
+          logError('Error saving to Azure Storage: ' + error);
+          fs.writeFileSync(STORAGE_DIR + filename, buffer);
+          writeCallback(null, true);
+          return;
+        }
 
+        writeCallback(null, result);
+        return;
+      }
+    );
   }
 
+  doesUserDataExist(userId,callback){
+    var blobService = this.getBlobService();
+
+    blobService.getBlobProperties(
+      STORAGE_AZURE_BLOB_CONTAINER,
+      userId,
+      function(err) {
+        if(err)
+        {
+          if(err.statusCode !== 404){
+            logError('Error determining whether user exists: ' + err);
+          }
+
+          callback(err);
+          return;
+        }
+
+        callback(null);
+        return;
+      });
+  }
+
+  getUserData(userId, callback){
+    var blobService = this.getBlobService();
+
+    blobService.getBlobToText(
+      STORAGE_AZURE_BLOB_CONTAINER,
+      userId,
+      function(err, blobContent) {
+        callback(err, blobContent);
+      });
+  }
+
+  saveUserData(userData, callback){
+    var blobService = this.getBlobService();
+
+    blobService.createBlockBlobFromText(
+      STORAGE_AZURE_BLOB_CONTAINER,
+      userData.id,
+      JSON.stringify(userData),
+      function(error, result){
+        callback(error, result);
+    });
+  }
+
+  getBlobService(){
+
+    var blobs = storage.createBlobService(AZURE_STORAGE_ACCOUNT, AZURE_STORAGE_ACCESS_KEY);
+
+      if(process.env.NODE_ENV === 'DEBUG'){
+        const localHost = 'http://127.0.0.1:10000/devstoreaccount1';
+        blobs = storage.createBlobService(AZURE_STORAGE_ACCOUNT, AZURE_STORAGE_ACCESS_KEY, localHost);
+        blobs.logger.level = storage.Logger.LogLevels.DEBUG;
+      }
+
+      // - CREATE CONTAINER IF NECESSARY
+      blobs.createContainerIfNotExists(
+        STORAGE_AZURE_BLOB_CONTAINER,
+        (err, result) => {
+
+          if (err) {
+            logError(err);
+          }
+
+          if (!result) {
+            logError('Unable to create container ' + STORAGE_AZURE_BLOB_CONTAINER);
+          }
+
+        }
+      );
+
+      return blobs;
+  }
 }
-
-// const storageDir = '/data/companionservice/';
-// const storageContainer = 'companionservice';
-
-// Create local filesystem storage directory
-// if (!fs.existsSync(storageDir)) {
-//   fs.mkdirSync(storageDir);
-// }
-
-// const blobs = storage.createBlobService(account, key);
-// //blobs.logger.level = storage.Logger.LogLevels.DEBUG;
-
-// blobs.createContainerIfNotExists(
-//   storageContainer,
-//   (err, result) => {
-//
-//     if (err) {
-//       error(err);
-//     }
-//
-//     if (!result) {
-//       error('Unable to create container ' + storageContainer);
-//     }
-//
-//   }
-// );
-
-// const write = (filename, buffer, callback) => {
-//
-//   const stream = new PassThrough();
-//   stream.end(buffer);
-//
-//   fs.writeFileSync(storageDir + filename, buffer);
-//
-//   blobs.createBlockBlobFromStream(
-//     storageContainer,
-//     filename,
-//     stream,
-//     buffer.length,
-//     {},
-//     (err, result) => {
-//
-//       if (err) {
-//         callback(err);
-//         return;
-//       }
-//
-//       if (!result) {
-//         callback('Unable to write ' + filename);
-//         return;
-//       }
-//
-//       callback();
-//
-//     }
-//   );
-//
-// };
-
-// export default {
-//   write,
-// };

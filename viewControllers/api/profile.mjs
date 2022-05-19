@@ -35,21 +35,25 @@ function putProfile (request, response) {
 
 function putProfile2 (request, response) {
 
+  const questionnaireResult = request.body;
   const userid = request.params.userid;
   const appData = new AppData();
 
   var user = new User(userid, appData);
 
-  const questionnaireResult = request.body;
+  user.loadUserData(function(err, user){
+    if(err){
+      response.status(500).end('Error loading user data.');
+    }else{
+      let profile = JSON.parse(questionnaireResult.profileData);
+      profile.date = questionnaireResult.timestamp;
 
-  let profile = JSON.parse(questionnaireResult.profileData);
-  profile.date = questionnaireResult.timestamp;
-
-  user.updateProfile(profile);
-  user.writeUserData();
-
-  response.status(200).end('ok');
-
+      user.updateProfile(profile);
+      user.writeUserData(function(){
+        response.status(200).end('ok');
+      });
+    }
+  });
 }
 
 export { getProfile, putProfile, putProfile2 };
