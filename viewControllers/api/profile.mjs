@@ -43,7 +43,7 @@ function putProfile2 (request, response) {
 
   user.loadUserData(function(err, user){
     if(err){
-      response.status(500).end('Error saving profile.');
+      response.status(500).end('Error loading user data.');
     }else{
       let profile = JSON.parse(questionnaireResult.profileData);
       profile.date = questionnaireResult.timestamp;

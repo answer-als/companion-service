@@ -34,26 +34,28 @@ export default class User {
         }
       };
 
-      this.storage.doesUserDataExist(self.id, function(err, doesExist){
+      this.storage.doesUserDataExist(self.id, function(err){
 
-        if(err){
-          callback(err);
-          return;
+        if(err)
+        {
+          if(err.statusCode !== 404){
+            callback(err);
+            return;
+          }else{
+            self.createUserData(getData);
+            return;
+          }
         }
 
-        if(doesExist){
-          self.storage.getUserData(self.id, function(err, blobContent){
-            if(err){
-              callback(err);
-              return;
-            }
+        self.storage.getUserData(self.id, function(err, blobContent){
+          if(err){
+            callback(err);
+            return;
+          }
 
-            let data = JSON.parse(blobContent);
-            getData(null, data);
-          });
-        }else{
-          this.createUserData(getData);
-        }
+          let data = JSON.parse(blobContent);
+          getData(null, data);
+        });
       });
     }
 
@@ -61,7 +63,7 @@ export default class User {
       const rawTemplateData = fs.readFileSync(this.userTemplatePath);
 
       let data = JSON.parse(rawTemplateData);
-
+      this.data = data;
       this.data.id = this.id;
       this.created_at = moment();
 
@@ -70,6 +72,8 @@ export default class User {
 
       // INITIALIZE SENTENCES
       this.data.sentences.sequence = this.appData.getRandomSentenceSequence();
+
+      this.writeUserData();
 
       getData(null, data);
     }
