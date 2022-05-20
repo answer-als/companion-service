@@ -71,6 +71,7 @@ app.set('port', process.env.PORT || 3000);
 
 var server = app.listen(app.get('port'), () => {
   debug('Listening on ' + server.address().port);
+  debug('Running in Environment: ' + process.env.NODE_ENV);
 });
 
 

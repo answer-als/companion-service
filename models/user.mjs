@@ -7,13 +7,19 @@ import appRoot from 'app-root-path';
 import AppData from './appData.mjs';
 import Storage from './storage.mjs';
 
-const error = log('api').error;
+const error = log('app').error;
+
+var STORAGE_DIR = process.env.STORAGE_DIR || '/data/companionservice/';
+
+if(process.env.NODE_ENV === 'DEBUG'){
+  STORAGE_DIR = 'C:/DATA/Code/Cotingasoft/AnswerALS/companion-service/data/companionservice/';
+}
 
 export default class User {
 
     constructor(id) {
       this.id = id;
-      this.userFilePath = appRoot + '/data/users/' + this.id + '.json';
+      this.userFilePath = STORAGE_DIR + this.id + '.json';
       this.userTemplatePath = appRoot + '/data/user-template.json';
       this.appData = new AppData();
       this.storage = new Storage(this.appData);
@@ -59,6 +65,7 @@ export default class User {
         self.storage.getUserData(self.id, function(err, blobContent){
           if(err){
             error('Error getting user data: ' + err);
+            console.error('Error getting user data: ' + err);
 
             if (!fs.existsSync(self.userFilePath))
             {

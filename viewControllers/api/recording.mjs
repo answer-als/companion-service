@@ -3,7 +3,7 @@ import AppData from '../../models/appData.mjs';
 import Storage from '../../models/storage.mjs';
 import User from '../../models/user.mjs';
 
-const error = log('api').error;
+const error = log('app').error;
 
 function getRecording (request, response) {
 

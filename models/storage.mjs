@@ -4,7 +4,7 @@ import moment from 'moment';
 import storage from 'azure-storage';
 import { PassThrough } from 'stream';
 
-const logError = log('api').error;
+const logError = log('app').error;
 
 // JUST TO PLEASE THE LINTER FOR NOW
 const AZURE_STORAGE_ACCOUNT = process.env.AZURE_STORAGE_ACCOUNT;
