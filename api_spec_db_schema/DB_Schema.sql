@@ -58,6 +58,16 @@ CREATE TABLE RecordingTasks
     CONSTRAINT FK_RecordingTasks_Image_Id FOREIGN KEY(ImageId) REFERENCES RecordingTaskImages(Id)
 );
 
+CREATE TABLE RefusedTasks
+(
+	Id INT PRIMARY KEY,
+    Timestamp TIMESTAMP NOT NULL,
+    UserId INT NOT NULL,
+    TypeId INT NOT NULL
+    CONSTRAINT FK_RefusedTasks_User_Id FOREIGN KEY (UserId) REFERENCES Users(Id),
+    CONSTRAINT FK_RefusedTasks_Type_Id FOREIGN KEY (TypeId) REFERENCES RecordingTaskTypes(Id)
+);
+
 CREATE TABLE VersionHistory
 (
 	Id INT PRIMARY KEY,

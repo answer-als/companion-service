@@ -1,0 +1,91 @@
+Answer ALS API Specs:
+
+Login:
+Route: POST: /api/v1/login
+
+Model:
+class User{
+	id: int,
+	userName: string,
+	password: string, <- clear text password
+	currentVersion: string
+}
+
+Operation:
+- App will submit the user object
+	* If id is null -> new user
+		- User record will be created with database password = {Password Hash}:{Random Generated Salt}
+		- User record will be returned to app with new id and currentVersion of the API
+		- currentVersion will be compared to App version.  User will be notified to update app, if API version is greater than App version
+	* If id is not null -> existing user
+	    - Hash will be created with clear text password and salt from database password salt portion and compared with password hash portion
+		- If comparison fails, return 401 - Unauthorized
+		- If comparison succeeds, return 200 with currentVersion of the API
+		- currentVersion will be compared to App version.  User will be notified to update app, if API version is greater than App version
+
+Questionnaires:
+
+Enum: QuestionnaireTypes:
+ALSFRS = 1
+ROADS = 2
+
+Route: POST: /api/v1/questionnaire
+Model:
+class Questionnaire
+{
+	id: int,
+	userId: int,
+	typeId: int, <- QuestionnaireTypes
+	timestamp: datetime,
+	answers: string <- JSON Payload	
+}
+
+Operations:
+- App will submit the Questionnaire object
+- Object will be persisted to the database
+- Object will be returned with 200 with id of Questionnaire record to be saved locally in app
+	- Can use id == null to denote that questionnaire has not been uploaded.
+	
+Recordings:
+
+Enum: RecordingTaskTypes
+Sentence = 1,
+Image = 2,
+BreathCounting = 3,
+BreathAh = 4
+
+Route: POST: /api/v1/recordingTasks
+Model:
+class RecordingTask
+{
+	id: int,
+	userId: int,
+	typeId: int, <- RecordingTaskTypes
+	sentenceId: int, <- If Sentence Type, id from RecordingTaskSentences table
+	imageId: int, <- If Image Type, if from RecordingTaskImages table
+	timestamp: datetime,
+	recordingFileContents: IFormFile
+}
+
+Operations:
+- App will submit the RecordingTask object
+- A GUID will be generated and used as the RecordingFileId to save recording to Azure storage
+- Object will be persisted to the database
+- Object will be returned with 200 with id of RecordingTask record to be saved locally in app
+	- Can use id == null to denote that RecordingTask has not been uploaded.
+	
+Passed Tasks:
+Route: POST: /api/v1/refusedTasks
+Model:
+class RefusedTask
+{
+	id: int,
+	userId: int,
+	typeId: int, <- RecordingTaskTypes	
+	timestamp: datetime,
+}
+
+- App will submit the RefusedTask object
+- Object will be returned with 200 with if of RefusedTask record to be saved locally in app
+	- Can use id == null to denote that RefusedTask has not been uploaded.
+	
